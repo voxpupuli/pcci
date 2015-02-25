@@ -23,9 +23,11 @@ def totimestamp(dt, epoch=datetime(1970,1,1)):
 
 
 repos = ['puppet-community-ci/test',
-#         'puppetlabs/puppetlabs-rabbitmq',
-#         'puppetlabs/puppetlabs-apt',
-#         'puppetlabs/puppetlabs-concat',
+         'puppetlabs/puppetlabs-rabbitmq',
+         'puppetlabs/puppetlabs-apt',
+         'puppetlabs/puppetlabs-concat',
+         'puppetlabs/puppetlabs-inifile',
+         'puppetlabs/puppetlabs-mongodb',
          'pdxcat/puppet-module-collectd',
          'puppet-community/puppet-module-puppetboard']
 
