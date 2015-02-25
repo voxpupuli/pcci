@@ -18,7 +18,9 @@ def signal_handler(signal, frame):
 
 def setup_worker():
     #register as a worker
-    workers = int(r.get('workers'))
+    workers = r.get('workers')
+    if workers is None:
+        r.set('workers', 0)
     print "found {0} workers".format(workers)
     if workers >= config.workers:
         # we already have enough workers
@@ -35,7 +37,7 @@ def main_loop():
         if work_item == None:
             time.sleep(5)
             continue
-        tempdir = create_pr_env('puppet-community-ci/test/1')
+        tempdir = create_pr_env('work_item')
         run_beaker_rspec(tempdir)
         clean_tempdir(tempdir)
 
