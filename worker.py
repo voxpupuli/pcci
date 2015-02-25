@@ -1,3 +1,4 @@
+import os
 import shutil
 import signal
 import subprocess
@@ -42,6 +43,7 @@ def main_loop():
         run_beaker_rspec(tempdir)
         clean_tempdir(tempdir)
 
+
 def create_pr_env(work_item):
     print "working on {0}".format(work_item)
     org, project, pr = work_item.split('/')
@@ -51,14 +53,20 @@ def create_pr_env(work_item):
     subprocess.Popen(["git", "checkout", "pr_{0}".format(pr)], cwd=(tempdir + "/job")).communicate()
     return str(tempdir)
 
+
 def run_beaker_rspec(tempdir):
     jobdir = tempdir + "/job"
     print "running in {0}".format(jobdir)
-    out,err = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    os.mkdir(jobdir + '/.bundled_gems')
+    runenv = os.environ.copy()
+    runenv["GEM_HOME"]=(jobdir + '/.bundled_gems')
+    out,err = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv).communicate()
+    out,err = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv).communicate()
     print "the out is"
     print out
     print "the err is"
     print err
+
 
 def clean_tempdir(tempdir):
     shutil.rmtree(tempdir)
