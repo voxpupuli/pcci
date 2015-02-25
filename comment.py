@@ -26,6 +26,7 @@ def comment(comment_to_make):
     else:
         return
 
+    print "commenting on {0}".format(comment_to_make)
     #from pdb import set_trace; set_trace()
     prs = g.get_repo(org + "/" + project).get_issues()
 
