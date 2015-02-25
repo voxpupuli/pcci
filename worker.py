@@ -17,7 +17,6 @@ def signal_handler(signal, frame):
 
 
 def setup_worker():
-    r = redis.StrictRedis(host='localhost', port=6379, db=0)
     #register as a worker
     workers = int(r.get('workers'))
     print "found {0} workers".format(workers)
@@ -36,6 +35,9 @@ def main_loop():
         if work_item == None:
             time.sleep(5)
             continue
+        tempdir = create_pr_env('puppet-community-ci/test/1')
+        run_beaker_rspec(tempdir)
+        clean_tempdir(tempdir)
 
 def create_pr_env(work_item):
     print "working on {0}".format(work_item)
@@ -58,10 +60,8 @@ def clean_tempdir(tempdir):
 
 
 if __name__ == "__main__":
-    #setup_worker()
-    #main_loop()
-    tempdir = create_pr_env('puppet-community-ci/test/1')
-    run_beaker_rspec(tempdir)
-    clean_tempdir(tempdir)
+    r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    setup_worker()
+    main_loop()
 
 
