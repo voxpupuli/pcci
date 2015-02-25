@@ -78,7 +78,7 @@ def main_loop():
         log_path = write_log(work_item, response)
         print "log written to {0}".format(log_path)
         r.rpush('completed', log_path)
-        clean_tempdir(tempdir)
+        #clean_tempdir(tempdir)
 
 
 def create_pr_env(work_item):
