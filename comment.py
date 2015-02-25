@@ -21,8 +21,14 @@ def main_loop():
 def comment(comment_to_make):
     org, project, pr, ts, success = comment_to_make.split('+')
 
+    if project in config.commentable:
+        pass
+    else
+        return
+
     #from pdb import set_trace; set_trace()
     prs = g.get_repo(org + "/" + project).get_issues()
+
 
     pr_object = None
 
