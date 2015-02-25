@@ -52,7 +52,9 @@ def create_pr_env(work_item):
     return tempdir
 
 def run_beaker_rspec(tempdir):
-    out,err = subprocess.Popen(["bundle", "exec", "beaker", "spec/acceptance"], cwd=(tempdir + "/job"), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    jobdir = tempdir + "/job"
+    print "running in {0}".format(jobdir)
+    out,err = subprocess.Popen(["bundle", "exec", "beaker", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
     print "the out is"
     print out
     print "the err is"
