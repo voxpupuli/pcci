@@ -22,20 +22,25 @@ def totimestamp(dt, epoch=datetime(1970,1,1)):
 
 
 
-repo = 'puppet-community-ci/test'
-pulls = g.get_repo(repo).get_pulls()
+repos = ['puppet-community-ci/test',
+#         'puppetlabs/puppetlabs-rabbitmq',
+         'puppet-community/puppet-module-puppetboard']
 
-for pull in pulls:
-    #from pdb import set_trace; set_trace()
-    unique_name = repo + "/" + str(pull.number)
-    current_merge_commit_sha = pull.merge_commit_sha
-    merge_commit_sha = r.get(unique_name)
-    print unique_name
-    print merge_commit_sha
-    print current_merge_commit_sha
-    if merge_commit_sha != current_merge_commit_sha:
-      r.set(unique_name, current_merge_commit_sha)
-      r.rpush('todo', unique_name)
 
-    #r.set(pull.number, pull.update_at.utcnow())
+for repo in repos:
+    pulls = g.get_repo(repo).get_pulls()
+
+    for pull in pulls:
+        #from pdb import set_trace; set_trace()
+        unique_name = repo + "/" + str(pull.number)
+        current_merge_commit_sha = pull.merge_commit_sha
+        merge_commit_sha = r.get(unique_name)
+        print unique_name
+        print merge_commit_sha
+        print current_merge_commit_sha
+        if merge_commit_sha != current_merge_commit_sha:
+            r.set(unique_name, current_merge_commit_sha)
+            r.rpush('todo', unique_name)
+
+        #r.set(pull.number, pull.update_at.utcnow())
 
