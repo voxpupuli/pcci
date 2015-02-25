@@ -35,8 +35,12 @@ def setup_worker():
 def write_log(work_item, response):
     path = config.logpath
     org, project, pr = work_item.split('/')
+    if response['success'] == 0:
+        succ = 'PASS'
+    else:
+        succ = 'FAIL'
     unix_seconds = datetime.datetime.utcnow().strftime('%s')
-    filename =  "{0}+{1}+{2}+{3}".format(org,project,pr,unix_seconds)
+    filename =  "{0}+{1}+{2}+{3}+{4}".format(org,project,pr,unix_seconds,succ)
     with open(path + "/" + filename, 'w') as f:
         f.write("Test log\n")
         f.write("Test performed at {0} - {1}\n".format(unix_seconds, datetime.datetime.utcnow()))
