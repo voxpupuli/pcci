@@ -45,6 +45,7 @@ def write_log(work_item, response):
         f.write("Test log\n")
         f.write("Test performed at {0} - {1}\n".format(unix_seconds, datetime.datetime.utcnow()))
         f.write("{0}/{1} PR # {2}\n".format(org, project, pr))
+        f.write("Took {0} Seconds\n".format(response['time']))
         if response['success'] == 0:
             f.write("Tests passed\n")
         else:
@@ -92,6 +93,7 @@ def create_pr_env(work_item):
 
 
 def run_beaker_rspec(tempdir):
+    t1 = datetime.datetime.utcnow()
     jobdir = tempdir + "/job"
     print "running in {0}".format(jobdir)
     os.mkdir(jobdir + '/.bundled_gems')
@@ -101,12 +103,16 @@ def run_beaker_rspec(tempdir):
     gemout, gemerr = gem.communicate()
     beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
     out, err = beaker.communicate()
+    t2 = datetime.datetime.utcnow()
+    t_delta = t2 - t1
     response = { 'gemout'  : gemout,
                  'gemerr'  : gemerr,
                  'out'     : out,
                  'err'     : err,
-                 'success' : beaker.returncode
+                 'success' : beaker.returncode,
+                 'time'    : t_delta.seconds
                  }
+
     return response
 
 
