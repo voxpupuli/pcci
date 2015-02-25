@@ -1,0 +1,5 @@
+PyGithub==1.25.2
+SQLAlchemy==0.9.8
+argparse==1.2.1
+redis==2.10.3
+wsgiref==0.1.2
