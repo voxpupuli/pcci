@@ -1,3 +1,4 @@
+import datetime
 import os
 import shutil
 import signal
@@ -31,6 +32,27 @@ def setup_worker():
     r.incr('workers')
 
 
+def write_log(work_item, response):
+    path = config.logpath
+    org, project, pr = work_item.split('/')
+    unix_seconds = datetime.datetime.utcnow().strftime('%s')
+    filename =  "{0}-{1}-{2}-{3}".format(org,project,pr,unix_seconds)
+    with open(path + "/" + filename, 'w') as f:
+        f.write("Test log\n")
+        f.write("Test performed at {0} - {1}\n".format(unix_seconds, datetime.datetime.utcnow()))
+        f.write("{0}/{1} PR # {2}\n".format(org, project, pr))
+        for line in response['gemout']:
+            f.write(line)
+        for line in response['gemerr']:
+            f.write(line)
+        for line in response['out']:
+            f.write(line)
+        for line in response['err']:
+            f.write(line)
+    f.closed
+    return (filename)
+
+
 def main_loop():
     #never exits
     while True:
@@ -40,7 +62,10 @@ def main_loop():
             time.sleep(5)
             continue
         tempdir = create_pr_env(work_item)
-        run_beaker_rspec(tempdir)
+        response = run_beaker_rspec(tempdir)
+        log_path = write_log(work_item, response)
+        print "log written to {0}".format(log_path)
+        r.rpush('completed', log_path)
         clean_tempdir(tempdir)
 
 
@@ -60,12 +85,14 @@ def run_beaker_rspec(tempdir):
     os.mkdir(jobdir + '/.bundled_gems')
     runenv = os.environ.copy()
     runenv["GEM_HOME"]=(jobdir + '/.bundled_gems')
-    out,err = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv).communicate()
+    gemout,gemerr = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv).communicate()
     out,err = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv).communicate()
-    print "the out is"
-    print out
-    print "the err is"
-    print err
+    response = { 'gemout': gemout,
+                 'gemerr': gemerr,
+                 'out'   : out,
+                 'err'   : err
+                 }
+    return response
 
 
 def clean_tempdir(tempdir):
