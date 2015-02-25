@@ -23,7 +23,7 @@ def comment(comment_to_make):
 
     if project in config.commentable:
         pass
-    else
+    else:
         return
 
     #from pdb import set_trace; set_trace()
