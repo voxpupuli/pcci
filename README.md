@@ -14,3 +14,19 @@ requirements:
 
 
 
+application deployment:
+
+
+right now this is super janky.
+
+
+follow_pull_requests.py is run by 5 minute cron
+
+
+8 worker.py's run  (sent to background in shell)
+
+
+one comment.py is run in the foreground in a tmux
+
+
+improvement needed!
