@@ -21,11 +21,12 @@ def setup_worker():
     workers = r.get('workers')
     if workers is None:
         r.set('workers', 0)
-    print "found {0} workers".format(workers)
-    if workers >= config.workers:
-        # we already have enough workers
-        print "deactivating because we already have enough workers"
-        sys.exit()
+    else:
+        print "found {0} workers".format(workers)
+        if int(workers) >= config.workers:
+            # we already have enough workers
+            print "deactivating because we already have enough workers"
+            sys.exit()
     r.incr('workers')
 
 
@@ -37,7 +38,7 @@ def main_loop():
         if work_item == None:
             time.sleep(5)
             continue
-        tempdir = create_pr_env('work_item')
+        tempdir = create_pr_env(work_item)
         run_beaker_rspec(tempdir)
         clean_tempdir(tempdir)
 
