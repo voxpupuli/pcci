@@ -6,6 +6,7 @@
 import redis
 from github import Github
 from datetime import datetime, timedelta
+import config
 
 g = Github("puppet-community-ci", config.password)
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
