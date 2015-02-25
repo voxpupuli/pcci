@@ -41,6 +41,10 @@ def write_log(work_item, response):
         f.write("Test log\n")
         f.write("Test performed at {0} - {1}\n".format(unix_seconds, datetime.datetime.utcnow()))
         f.write("{0}/{1} PR # {2}\n".format(org, project, pr))
+        if response['success'] == 0:
+            f.write("Tests passed\n")
+        else:
+            f.write("Tests failed\n")
         for line in response['gemout']:
             f.write(line)
         for line in response['gemerr']:
@@ -63,6 +67,10 @@ def main_loop():
             continue
         tempdir = create_pr_env(work_item)
         response = run_beaker_rspec(tempdir)
+        if response['success'] == 0:
+            print "Tests passed"
+        else:
+            print "Tests failed"
         log_path = write_log(work_item, response)
         print "log written to {0}".format(log_path)
         r.rpush('completed', log_path)
@@ -85,12 +93,15 @@ def run_beaker_rspec(tempdir):
     os.mkdir(jobdir + '/.bundled_gems')
     runenv = os.environ.copy()
     runenv["GEM_HOME"]=(jobdir + '/.bundled_gems')
-    gemout,gemerr = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv).communicate()
-    out,err = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv).communicate()
-    response = { 'gemout': gemout,
-                 'gemerr': gemerr,
-                 'out'   : out,
-                 'err'   : err
+    gem = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+    gemout, gemerr = gem.communicate()
+    beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+    out, err = beaker.communicate()
+    response = { 'gemout'  : gemout,
+                 'gemerr'  : gemerr,
+                 'out'     : out,
+                 'err'     : err,
+                 'success' : beaker.returncode
                  }
     return response
 
