@@ -49,7 +49,7 @@ def create_pr_env(work_item):
     git_clone = subprocess.call(["git", "clone", "https://github.com/{0}/{1}".format(org, project), tempdir + "/job"])
     subprocess.Popen(["git", "fetch", "origin", "pull/{0}/head:pr_{0}".format(pr)], cwd=(tempdir + "/job")).communicate()
     subprocess.Popen(["git", "checkout", "pr_{0}".format(pr)], cwd=(tempdir + "/job")).communicate()
-    return tempdir
+    return str(tempdir)
 
 def run_beaker_rspec(tempdir):
     jobdir = tempdir + "/job"
