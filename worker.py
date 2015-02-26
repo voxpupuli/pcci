@@ -62,6 +62,14 @@ def write_log(work_item, response):
     return (filename)
 
 
+def clean_up(tempdir):
+    time.sleep(120) # give vagrant time to self-kill
+    jobdir = (tempdir + "/job/.vagrant/beaker_vagrant_files/")
+    vagrant = subprocess.Popen(["vagrant", "destroy"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+
+    clean_tempdir(tempdir)
+
+
 def main_loop():
     #never exits
     while True:
@@ -79,7 +87,7 @@ def main_loop():
         log_path = write_log(work_item, response)
         print "log written to {0}".format(log_path)
         r.rpush('completed', log_path)
-        #clean_tempdir(tempdir)
+        clean_up()
 
 
 def create_pr_env(work_item):
@@ -93,25 +101,31 @@ def create_pr_env(work_item):
 
 
 def run_beaker_rspec(tempdir):
-    t1 = datetime.datetime.utcnow()
-    jobdir = tempdir + "/job"
-    print "running in {0}".format(jobdir)
-    os.mkdir(jobdir + '/.bundled_gems')
-    runenv = os.environ.copy()
-    runenv["GEM_HOME"]=(jobdir + '/.bundled_gems')
-    gem = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
-    gemout, gemerr = gem.communicate()
-    beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
-    out, err = beaker.communicate()
-    t2 = datetime.datetime.utcnow()
-    t_delta = t2 - t1
-    response = { 'gemout'  : gemout,
-                 'gemerr'  : gemerr,
-                 'out'     : out,
-                 'err'     : err,
-                 'success' : beaker.returncode,
-                 'time'    : t_delta.seconds
-                 }
+    response = {}
+    for time in range(3):
+        t1 = datetime.datetime.utcnow()
+        jobdir = tempdir + "/job"
+        print "running in {0}".format(jobdir)
+        os.mkdir(jobdir + '/.bundled_gems')
+        runenv = os.environ.copy()
+        runenv["GEM_HOME"]=(jobdir + '/.bundled_gems')
+        gem = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+        gemout, gemerr = gem.communicate()
+        beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+        out, err = beaker.communicate()
+        t2 = datetime.datetime.utcnow()
+        t_delta = t2 - t1
+        response = { 'gemout'  : gemout,
+                     'gemerr'  : gemerr,
+                     'out'     : out,
+                     'err'     : err,
+                     'success' : beaker.returncode,
+                     'time'    : t_delta.seconds
+                     }
+        if beaker.returncode == 0:
+            return response
+        if t_delta.seconds > 1000:
+            return response
 
     return response
 
