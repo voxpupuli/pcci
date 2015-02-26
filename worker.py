@@ -65,7 +65,7 @@ def write_log(work_item, response):
 def clean_up(tempdir):
     time.sleep(120) # give vagrant time to self-kill
     jobdir = (tempdir + "/job/.vagrant/beaker_vagrant_files/default.yml")
-    vagrant = subprocess.Popen(["vagrant", "destroy"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+    vagrant = subprocess.Popen(["vagrant", "destroy"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     vagrant.communicate()
 
     clean_tempdir(tempdir)
