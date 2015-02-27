@@ -28,6 +28,8 @@ repos = config.repos
 
 for repo in repos:
     pulls = g.get_repo(repo).get_pulls()
+    if config.build_todo_aggressively:
+        r.rpush('todo', repo + "/master")
 
     for pull in pulls:
         #from pdb import set_trace; set_trace()
