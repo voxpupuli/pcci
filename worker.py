@@ -140,8 +140,8 @@ def run_beaker_rspec(tempdir):
                  'gemerr'  : gemerr,
                  'out'     : out,
                  'err'     : err,
-                 'success' : beaker.returncode,
-                 'time'    : t_delta.seconds
+                 'success' : int(beaker.returncode),
+                 'time'    : int(t_delta.seconds)
                  }
 
 
