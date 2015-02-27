@@ -85,6 +85,8 @@ def main_loop():
     try:
         while True:
             print 'looping'
+            if r.get('workers_run') is None:
+                sys.exit()
             work_item = r.lpop('todo')
             if work_item == None:
                 time.sleep(5)
