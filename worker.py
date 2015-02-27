@@ -65,7 +65,7 @@ def write_log(work_item, response):
 def vagrant_kill(vagrant_run_dir):
     try:
 
-        vagrant = subprocess.Popen(["vagrant", "destroy"], cwd=vagrant_run_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        vagrant = subprocess.Popen(["vagrant", "destroy", "-f"], cwd=vagrant_run_dir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         vagrant.communicate()
 
     except OSError:
