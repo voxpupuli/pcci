@@ -62,9 +62,7 @@ def write_log(work_item, response):
     return (filename)
 
 
-def clean_up(tempdir):
-    time.sleep(120) # give vagrant time to self-kill
-    jobdir = (tempdir + "/job/.vagrant/beaker_vagrant_files/default.yml")
+def vagrant_kill(vagrant_run_dir):
     try:
 
         vagrant = subprocess.Popen(["vagrant", "destroy"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -72,6 +70,12 @@ def clean_up(tempdir):
 
     except OSError:
         pass
+
+
+def clean_up(tempdir):
+    time.sleep(120) # give vagrant time to self-kill
+    jobdir = (tempdir + "/job/.vagrant/beaker_vagrant_files/default.yml")
+    vagant_kill(jobdir)
 
     clean_tempdir(tempdir)
 
@@ -128,10 +132,13 @@ def run_beaker_rspec(tempdir):
                      'success' : beaker.returncode,
                      'time'    : t_delta.seconds
                      }
+
         if beaker.returncode == 0:
             return response
         if t_delta.seconds > 1000:
             return response
+
+        vagrant_kill(tempdir + "/job/.vagrant/beaker_vagrant_files/default.yml")
         clean_tempdir(tempdir + "/job")
 
     return response
