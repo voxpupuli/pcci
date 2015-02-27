@@ -43,7 +43,7 @@ for repo in repos:
         print unique_name
         print merge_commit_sha
         print current_merge_commit_sha
-        if config.bulid_todo_aggresively:
+        if config.build_todo_aggresively:
             r.rpush('todo', unique_name)
         if merge_commit_sha != current_merge_commit_sha:
             r.set(unique_name, current_merge_commit_sha)
