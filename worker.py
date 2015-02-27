@@ -75,7 +75,7 @@ def vagrant_kill(vagrant_run_dir):
 def clean_up(tempdir):
     time.sleep(120) # give vagrant time to self-kill
     jobdir = (tempdir + "/job/.vagrant/beaker_vagrant_files/default.yml")
-    vagant_kill(jobdir)
+    vagrant_kill(jobdir)
 
     clean_tempdir(tempdir)
 
