@@ -112,9 +112,9 @@ def run_beaker_rspec(tempdir):
         t1 = datetime.datetime.utcnow()
         jobdir = tempdir + "/job"
         print "running in {0}".format(jobdir)
-        os.mkdir(jobdir + '/.bundled_gems')
+        os.mkdir(jobdir + '/.pcci_gems')
         runenv = os.environ.copy()
-        runenv["GEM_HOME"]=(jobdir + '/.bundled_gems')
+        runenv["GEM_HOME"]=(jobdir + '/.pcci_gems')
         gem = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
         gemout, gemerr = gem.communicate()
         beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
