@@ -87,7 +87,7 @@ def main_loop():
     work_item = r.lpop('todo')
     if work_item == None:
         time.sleep(5)
-        continue
+        sys.exit()
     tempdir = create_pr_env(work_item)
     response = run_beaker_rspec(tempdir)
     if response['success'] == 0:
