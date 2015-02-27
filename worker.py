@@ -81,31 +81,27 @@ def clean_up(tempdir):
 
 
 def main_loop():
-    #never exits
-    try:
-        while True:
-            print 'looping'
-            if r.get('workers_run') is None:
-                sys.exit()
-            work_item = r.lpop('todo')
-            if work_item == None:
-                time.sleep(5)
-                continue
-            tempdir = create_pr_env(work_item)
-            response = run_beaker_rspec(tempdir)
-            if response['success'] == 0:
-                print "Tests passed"
-            else:
-                print "Tests failed"
-            log_path = write_log(work_item, response)
-            print "log written to {0}".format(log_path)
-            r.rpush('completed', log_path)
-            clean_up(tempdir)
-
-    except:
-        print('Shutting down worker')
-        r.decr('workers')
+    print 'looping'
+    if r.get('workers_run') is None:
         sys.exit()
+    work_item = r.lpop('todo')
+    if work_item == None:
+        time.sleep(5)
+        continue
+    tempdir = create_pr_env(work_item)
+    response = run_beaker_rspec(tempdir)
+    if response['success'] == 0:
+        print "Tests passed"
+    else:
+        print "Tests failed"
+    log_path = write_log(work_item, response)
+    print "log written to {0}".format(log_path)
+    r.rpush('completed', log_path)
+    clean_up(tempdir)
+
+    print('Shutting down worker')
+    r.decr('workers')
+    sys.exit()
 
 
 def create_pr_env(work_item):
