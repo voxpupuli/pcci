@@ -132,6 +132,7 @@ def run_beaker_rspec(tempdir):
             return response
         if t_delta.seconds > 1000:
             return response
+        clean_tempdir(tempdir + "/job")
 
     return response
 
