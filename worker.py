@@ -92,9 +92,9 @@ def main_loop():
     for run in range(3): # try 3 times
         tempdir = create_pr_env(work_item)
         response = run_beaker_rspec(tempdir)
-        if beaker.returncode == 0:
+        if response['success'] == 0:
             break
-        if t_delta.seconds > 1000:
+        if response['time']  > 1000:
             break
         clean_up(tempdir)
 
