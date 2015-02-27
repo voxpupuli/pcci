@@ -88,8 +88,16 @@ def main_loop():
     if work_item == None:
         time.sleep(5)
         sys.exit()
-    tempdir = create_pr_env(work_item)
-    response = run_beaker_rspec(tempdir)
+    response = {}
+    for run in range(3): # try 3 times
+        tempdir = create_pr_env(work_item)
+        response = run_beaker_rspec(tempdir)
+        if beaker.returncode == 0:
+            break
+        if t_delta.seconds > 1000:
+            break
+        clean_up(tempdir)
+
     if response['success'] == 0:
         print "Tests passed"
     else:
@@ -115,35 +123,26 @@ def create_pr_env(work_item):
 
 
 def run_beaker_rspec(tempdir):
-    response = {}
-    for time in range(3):
-        t1 = datetime.datetime.utcnow()
-        jobdir = tempdir + "/job"
-        print "running in {0}".format(jobdir)
-        os.mkdir(jobdir + '/.pcci_gems')
-        runenv = os.environ.copy()
-        runenv["GEM_HOME"]=(jobdir + '/.pcci_gems')
-        gem = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
-        gemout, gemerr = gem.communicate()
-        beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
-        out, err = beaker.communicate()
-        t2 = datetime.datetime.utcnow()
-        t_delta = t2 - t1
-        response = { 'gemout'  : gemout,
-                     'gemerr'  : gemerr,
-                     'out'     : out,
-                     'err'     : err,
-                     'success' : beaker.returncode,
-                     'time'    : t_delta.seconds
-                     }
+    t1 = datetime.datetime.utcnow()
+    jobdir = tempdir + "/job"
+    print "running in {0}".format(jobdir)
+    os.mkdir(jobdir + '/.pcci_gems')
+    runenv = os.environ.copy()
+    runenv["GEM_HOME"]=(jobdir + '/.pcci_gems')
+    gem = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+    gemout, gemerr = gem.communicate()
+    beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+    out, err = beaker.communicate()
+    t2 = datetime.datetime.utcnow()
+    t_delta = t2 - t1
+    response = { 'gemout'  : gemout,
+                 'gemerr'  : gemerr,
+                 'out'     : out,
+                 'err'     : err,
+                 'success' : beaker.returncode,
+                 'time'    : t_delta.seconds
+                 }
 
-        if beaker.returncode == 0:
-            return response
-        if t_delta.seconds > 1000:
-            return response
-
-        vagrant_kill(tempdir + "/job/.vagrant/beaker_vagrant_files/default.yml")
-        clean_tempdir(tempdir + "/job")
 
     return response
 
