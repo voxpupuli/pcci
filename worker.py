@@ -130,6 +130,9 @@ def run_beaker_rspec(tempdir):
     os.mkdir(jobdir + '/.pcci_gems')
     runenv = os.environ.copy()
     runenv["GEM_HOME"]=(jobdir + '/.pcci_gems')
+    nodesets = os.listdir('spec/acceptance/nodesets')
+    if 'ubuntu-server-1404-x64.yml' in nodesets:
+        runenv["BEAKER_set"]='ubuntu-server-1404-x64'
     gem = subprocess.Popen(["bundle", "install"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
     gemout, gemerr = gem.communicate()
     beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
