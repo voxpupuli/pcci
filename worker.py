@@ -150,6 +150,7 @@ def run_beaker_rspec(tempdir):
                  'time'    : int(t_delta.seconds),
                  'harness_failure': False,
                  }
+    print "parsing output for likely failures"
     for line in out:
         if 'connection closed by remote host (Net::SSH::Disconnect)' in line:
             print "harness failure detected"
