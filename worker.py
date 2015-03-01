@@ -105,7 +105,6 @@ def main_loop():
     log_path = write_log(work_item, response)
     print "log written to {0}".format(log_path)
     r.rpush('completed', log_path)
-    clean_up(tempdir)
 
     print('Shutting down worker')
     r.decr('workers')
