@@ -88,7 +88,7 @@ def main_loop():
     if work_item == None:
         time.sleep(5)
         sys.exit()
-    print "starting work on {0}".format(workitem)
+    print "starting work on {0}".format(work_item)
     response = {}
     for run in range(3): # try 3 times
         tempdir = create_pr_env(work_item)
