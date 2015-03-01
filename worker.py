@@ -41,6 +41,9 @@ def write_log(work_item, response):
         succ = 'FAIL'
     unix_seconds = datetime.datetime.utcnow().strftime('%s')
     filename =  "{0}+{1}+{2}+{3}+{4}".format(org,project,pr,unix_seconds,succ)
+    if response['harness_failure']:
+        filename = "harness_failures/" + filename
+
     with open(path + "/" + filename, 'w') as f:
         f.write("Test log\n")
         f.write("Test performed at {0} - {1}\n".format(unix_seconds, datetime.datetime.utcnow()))
@@ -144,8 +147,11 @@ def run_beaker_rspec(tempdir):
                  'out'     : out,
                  'err'     : err,
                  'success' : int(beaker.returncode),
-                 'time'    : int(t_delta.seconds)
+                 'time'    : int(t_delta.seconds),
+                 'harness_failure': False,
                  }
+    if 'connection closed by remote host (Net::SSH::Disconnect)' in out:
+        response['harness_failure'] = True
 
 
     return response
