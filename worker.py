@@ -126,6 +126,15 @@ def create_pr_env(work_item):
     return str(tempdir)
 
 
+def run_beaker_from_nibz(tempdir, runenv):
+    jobdir = tempdir + "/job"
+    os.mkdir(jobdir + '/.beaker')
+    git_clone = subprocess.call(["git", "clone", "https://github.com/nibalizer/beaker"), jobdir + ".beaker/"])
+    beaker_install = subprocess.Popen(["gem", "install", "beaker"], cwd=(jobdir + ".beaker/beaker"), env=runenv)
+    beaker_install.communicate()
+
+
+
 def run_beaker_rspec(tempdir):
     t1 = datetime.datetime.utcnow()
     jobdir = tempdir + "/job"
