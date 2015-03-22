@@ -4,6 +4,7 @@
 #from pdb import set_trace; set_trace()
 
 import redis
+import json
 from github import Github
 from datetime import datetime, timedelta
 import config
@@ -21,10 +22,7 @@ def totimestamp(dt, epoch=datetime(1970,1,1)):
     return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 1e6 )
 
 
-
-
 repos = config.repos
-
 
 for repo in repos:
     pulls = g.get_repo(repo).get_pulls()
@@ -35,15 +33,22 @@ for repo in repos:
         #from pdb import set_trace; set_trace()
         unique_name = repo + "/" + str(pull.number)
         current_merge_commit_sha = pull.merge_commit_sha
-        merge_commit_sha = r.get(unique_name)
-        print unique_name
-        print merge_commit_sha
-        print current_merge_commit_sha
-        if config.build_todo_aggressively:
+        raw = r.get(unique_name)
+        if raw is not None:
+            stored_pull = json.loads(raw)
+            merge_commit_sha = stored_pull['merge_commit_sha']
+            print unique_name
+            print merge_commit_sha
+            print current_merge_commit_sha
+            if config.build_todo_aggressively:
+                r.rpush('todo', unique_name)
+            if merge_commit_sha != current_merge_commit_sha:
+                stored_pull['merge_commit_sha'] = current_merge_commit_sha
+                r.set(unique_name, json.dumps(stored_pull))
+                r.rpush('todo', unique_name)
+        else:
+            stored_pull = {}
+            stored_pull['merge_commit_sha'] = current_merge_commit_sha
+            r.set(unique_name, json.dumps(stored_pull))
             r.rpush('todo', unique_name)
-        if merge_commit_sha != current_merge_commit_sha:
-            r.set(unique_name, current_merge_commit_sha)
-            r.rpush('todo', unique_name)
-
-        #r.set(pull.number, pull.update_at.utcnow())
 
