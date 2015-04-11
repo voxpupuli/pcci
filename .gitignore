@@ -3,3 +3,4 @@ config.py
 venv
 *.swp
 *.swo
+webconfig.yaml
