@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import redis
 import json
+import yaml
 
 app = Flask(__name__)
 
@@ -12,14 +13,11 @@ def root():
 
 @app.route('/queue')
 def show_queue():
-    print 'science'
     queue_length = r.llen('todo')
     queue = []
     for i in range(queue_length):
         name = json.loads(r.lindex('todo', i))['unique_name']
         item = json.loads(r.get(name))
-        print item['name']
-        print item['time']
         #item = ('x', 'y')
         queue.append((item['name'], item['time']))
 
@@ -28,11 +26,23 @@ def show_queue():
     resp += "Queue Length {0}<p>".format(queue_length)
     resp += "<table>"
     for item in queue:
-        a,b = item
+        a, b = item
         resp += "<tr><td>{0}</td><td>{1}</td>".format(a, b)
     resp += "</table>"
     resp += "</body></html>"
     return resp
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    with open('webconfig.yaml') as f:
+        conf = yaml.load(f.read())
+    f.closed
+
+    debug = conf['debug']
+    host = conf['host']
+
+    app.run(debug=debug, host=host)
+
+
+
+
+
