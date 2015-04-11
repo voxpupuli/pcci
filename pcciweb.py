@@ -34,7 +34,7 @@ def show_queue():
 
 
     return render_template("queue.html",
-                            workers,
+                            workers=workers,
                             queue_length=queue_length,
                             queue=queue,
                             in_progress_length=in_progress_length,
