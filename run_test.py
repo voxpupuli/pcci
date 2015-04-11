@@ -64,7 +64,7 @@ def create_pr_env(work_item):
 
 
 def run_beaker_rspec(tempdir):
-    # record starttime
+    # Record starttime
     t1 = datetime.datetime.utcnow()
 
     jobdir = tempdir + "/job"
@@ -81,14 +81,14 @@ def run_beaker_rspec(tempdir):
     write_nodeset(jobdir + '/spec/acceptance/nodesets/libvirt.yml')
 
     # Run the test
-    beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+    beaker = subprocess.Popen(["rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
     out, err = beaker.communicate()
 
-    # record endtime
+    # Record endtime, calculate t delta
     t2 = datetime.datetime.utcnow()
-
-    #setup response object
     t_delta = t2 - t1
+
+    # Setup response object
     response = { 'out'     : out,
                  'err'     : err,
                  'success' : int(beaker.returncode),
@@ -96,7 +96,7 @@ def run_beaker_rspec(tempdir):
                  'harness_failure': False,
                  }
 
-    # really the most important message
+    # The most important metadata
     if response['success'] == 0:
         print "Tests passed"
     else:
