@@ -151,7 +151,7 @@ if __name__ == "__main__":
     log_path = write_log(work_item['unique_name'], response)
     print "log written to {0}".format(log_path)
     r.rpush('completed', log_path)
-    r.sadd("in_progress", work_item['unique_name'])
+    r.srem("in_progress", work_item['unique_name'])
     print('Shutting down worker')
     r.decr('workers')
 
