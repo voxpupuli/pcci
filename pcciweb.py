@@ -23,6 +23,18 @@ def show_queue():
 
     return render_template("queue.html", queue_length=queue_length, queue=queue)
 
+@app.route('/completed')
+def show_completed():
+    completed_length = r.llen('completed')
+    completed = []
+    for i in range(completed_length):
+        item = r.rindex('completed', i)
+        #item = ('x', 'y')
+        queue.append(item)
+
+    return render_template("completed.html", completed_length=completed_length, completed=completed)
+
+
 if __name__ == '__main__':
     with open('webconfig.yaml') as f:
         conf = yaml.load(f.read())
