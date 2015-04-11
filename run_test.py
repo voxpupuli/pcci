@@ -74,7 +74,7 @@ def run_beaker_rspec(tempdir):
     runenv = os.environ.copy()
     runenv["BEAKER_set"] = 'libvirt'
     runenv["GEM_HOME"] = '/home/pcci/ruby_pcci_gempath'
-    runenv["PATH"] = ':/home/pcci/ruby_pcci_gempath/bin/'
+    runenv["PATH"] = '/home/pcci/ruby_pcci_gempath/bin:' + runenv["PATH"]
     print "Using libvirt nodeset"
 
     # Write out nodeset file
@@ -89,9 +89,7 @@ def run_beaker_rspec(tempdir):
 
     #setup response object
     t_delta = t2 - t1
-    response = { 'gemout'  : gemout,
-                 'gemerr'  : gemerr,
-                 'out'     : out,
+    response = { 'out'     : out,
                  'err'     : err,
                  'success' : int(beaker.returncode),
                  'time'    : int(t_delta.seconds),
@@ -128,10 +126,6 @@ def write_log(work_item, response):
             f.write("Tests passed\n")
         else:
             f.write("Tests failed\n")
-        for line in response['gemout']:
-            f.write(line)
-        for line in response['gemerr']:
-            f.write(line)
         for line in response['out']:
             f.write(line)
         for line in response['err']:
@@ -153,7 +147,7 @@ if __name__ == "__main__":
     response = {}
     tempdir = create_pr_env(work_item['unique_name'])
     response = run_beaker_rspec(tempdir)
-    log_path = write_log(work_item, response)
+    log_path = write_log(work_item['unique_name'], response)
     print "log written to {0}".format(log_path)
     r.rpush('completed', log_path)
     print('Shutting down worker')
