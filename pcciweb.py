@@ -26,11 +26,16 @@ def show_queue():
 @app.route('/completed')
 def show_completed():
     completed_length = r.llen('completed')
-    completed = []
+
+    # redis doesn't have an rindex and python doesnt have prepend
+    # so build the list in reverse order then reverse it
+    rev_completed = []
     for i in range(completed_length):
         item = r.lindex('completed', i)
         #item = ('x', 'y')
-        completed.append(item)
+        rev_completed.append(item)
+
+    completed = rev_completed[::-1]
 
     return render_template("completed.html", completed_length=completed_length, completed=completed)
 
