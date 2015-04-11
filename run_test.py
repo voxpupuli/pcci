@@ -144,7 +144,6 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
     setup_worker()
-    main_loop()
     work_item = json.loads(r.lpop('todo'))
     if work_item == None:
         print "No work to do, shutting down"
