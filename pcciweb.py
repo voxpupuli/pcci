@@ -14,6 +14,8 @@ def root():
 
 @app.route('/queue')
 def show_queue():
+    workers = r.get('workers')
+
     queue_length = r.llen('todo')
     queue = []
     for i in range(queue_length):
@@ -32,6 +34,7 @@ def show_queue():
 
 
     return render_template("queue.html",
+                            workers,
                             queue_length=queue_length,
                             queue=queue,
                             in_progress_length=in_progress_length,
