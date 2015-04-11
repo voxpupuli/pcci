@@ -1,5 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
+<h3>In progress: {{ in_progress_length }}</h3>
+<br>
+<table>
+{% for item in in_progress %}
+<tr><td>{{item.name}}</td><td>{{item.time}}</td></tr>
+{% endfor %}
+</table>
 <h3>Queue Length: {{ queue_length }}</h3>
 <br>
 <table>

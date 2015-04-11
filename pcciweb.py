@@ -11,6 +11,7 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 def root():
     return '<html><body><h2>Pcci Web Interface</h2><br><a href="/queue">Queue</a><br><a href="/completed">Completed</a></body></html>'
 
+
 @app.route('/queue')
 def show_queue():
     queue_length = r.llen('todo')
@@ -21,7 +22,21 @@ def show_queue():
         #item = ('x', 'y')
         queue.append(item)
 
-    return render_template("queue.html", queue_length=queue_length, queue=queue)
+    in_progress_names = r.smembers('in_progress')
+    in_progress_length = len(in_progress_names)
+    in_progress = []
+    for name in in_progress_names:
+        item = json.loads(r.get(name))
+        #item = ('x', 'y')
+        in_progress.append(item)
+
+
+    return render_template("queue.html",
+                            queue_length=queue_length,
+                            queue=queue,
+                            in_progress_length=in_progress_length,
+                            in_progress=in_progress)
+
 
 @app.route('/completed')
 def show_completed():
