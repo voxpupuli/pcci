@@ -144,21 +144,15 @@ if __name__ == "__main__":
         print "No work to do, shutting down"
         sys.exit()
     print "starting work on {0}".format(work_item)
+    r.sadd("in_progress", work_item['unique_name'])
     response = {}
     tempdir = create_pr_env(work_item['unique_name'])
     response = run_beaker_rspec(tempdir)
     log_path = write_log(work_item['unique_name'], response)
     print "log written to {0}".format(log_path)
     r.rpush('completed', log_path)
+    r.sadd("in_progress", work_item['unique_name'])
     print('Shutting down worker')
     r.decr('workers')
-
-
-
-
-
-
-
-
 
 
