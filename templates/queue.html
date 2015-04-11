@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <h3>Workers Running (or crashed): {{ workers }}</h3>
-<h3>In progress: {{ in_progress_length }}</h3>
+<h3>Tests in progress: {{ in_progress_length }}</h3>
 <br>
 <table>
 {% for item in in_progress %}
