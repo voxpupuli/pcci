@@ -11,6 +11,25 @@ import redis
 
 import config
 
+def write_nodeset(path):
+    ns = """
+HOSTS:
+  ubuntu-server-12042-x64:
+    roles:
+      - master
+    platform: ubuntu-12.04-amd64
+    user: 'vagrant'
+    password: 'vagrant'
+    hypervisor : libvirt
+    qcow2: '/home/pcci/sandbox/ubuntuvagrant.qcow2'
+    private_key_file: '/home/pcci/.vagrant_private.key'
+CONFIG:
+  type: foss
+    """
+    with open(path, 'w') as f:
+        f.write(ns)
+    f.closed
+
 
 def setup_worker():
     #register as a worker
@@ -56,6 +75,9 @@ def run_beaker_rspec(tempdir):
     runenv["GEM_HOME"] = '/home/pcci/ruby_pcci_gempath'
     runenv["PATH"] = ':/home/pcci/ruby_pcci_gempath/bin/'
     print "Using libvirt nodeset"
+
+    # Write out nodeset file
+    write_nodeset(jobdir + '/spec/acceptance/nodesets/libvirt.yml')
 
     # Run the test
     beaker = subprocess.Popen(["bundle", "exec", "rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
