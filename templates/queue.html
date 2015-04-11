@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>Queue Length: {{ queue_length }}</h3>
+<br>
+<table>
+{% for item in queue %}
+<tr><td>{{item.name}}</td><td>{{item.time}}</td></tr>
+{% endfor %}
+</table>
+
+{% endblock content %}

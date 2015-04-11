@@ -9,7 +9,7 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 @app.route('/')
 def root():
-    return 'Pcci Web Interface'
+    return '<html><body><h2>Pcci Web Interface</h2><br><a href="/queue">Queue</a></body></html>'
 
 @app.route('/queue')
 def show_queue():
@@ -19,18 +19,9 @@ def show_queue():
         name = json.loads(r.lindex('todo', i))['unique_name']
         item = json.loads(r.get(name))
         #item = ('x', 'y')
-        queue.append((item['name'], item['time']))
+        queue.append(item)
 
-
-    resp =  "<html><head></head><body>"
-    resp += "Queue Length {0}<p>".format(queue_length)
-    resp += "<table>"
-    for item in queue:
-        a, b = item
-        resp += "<tr><td>{0}</td><td>{1}</td>".format(a, b)
-    resp += "</table>"
-    resp += "</body></html>"
-    return resp
+    return render_template("queue.html", queue_length=queue_length, queue=queue)
 
 if __name__ == '__main__':
     with open('webconfig.yaml') as f:
