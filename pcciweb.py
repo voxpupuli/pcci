@@ -9,7 +9,7 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 @app.route('/')
 def root():
-    return '<html><body><h2>Pcci Web Interface</h2><br><a href="/queue">Queue</a></body></html>'
+    return '<html><body><h2>Pcci Web Interface</h2><br><a href="/queue">Queue</a><br><a href="/completed">Completed</a></body></html>'
 
 @app.route('/queue')
 def show_queue():
