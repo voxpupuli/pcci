@@ -37,6 +37,9 @@ for repo in repos:
         if raw is None:
             stored_pull = {}
             stored_pull['merge_commit_sha'] = ''
+            stored_pull['name'] = unique_name
+            stored_pull['number'] = str(pull.number)
+            stored_pull['time'] = str(datetime.now())
         else:
             stored_pull = json.loads(raw)
 
@@ -46,8 +49,10 @@ for repo in repos:
         print current_merge_commit_sha
         if merge_commit_sha != current_merge_commit_sha:
             stored_pull['merge_commit_sha'] = current_merge_commit_sha
-            r.set(unique_name, json.dumps(stored_pull))
             job = {}
             job['unique_name'] = unique_name
             r.rpush('todo', json.dumps(job))
+        r.set(unique_name, json.dumps(stored_pull))
+
+
 
