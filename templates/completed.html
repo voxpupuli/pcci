@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h3>Queue Length: {{ completed_length }}</h3>
+<h3>Completed Tests: {{ completed_length }}</h3>
 <br>
 <table>
 {% for item in completed %}
-<tr><td>{{ item }}</td></tr>
+<tr><td><a href="http://planck.nibalizer.com/buildlogs/{{ item }}">{{item}}</a></td></tr>
 {% endfor %}
 </table>
 

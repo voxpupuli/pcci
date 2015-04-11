@@ -28,9 +28,9 @@ def show_completed():
     completed_length = r.llen('completed')
     completed = []
     for i in range(completed_length):
-        item = r.rindex('completed', i)
+        item = r.lindex('completed', i)
         #item = ('x', 'y')
-        queue.append(item)
+        completed.append(item)
 
     return render_template("completed.html", completed_length=completed_length, completed=completed)
 
