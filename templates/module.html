@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+<br>
+<h3>Completed Tests: {{ completed_length }}</h3>
+<table>
+{% for item in completed %}
+<tr>
+<td>{{ item.unique_name }}</td>
+<td>{{ item.response.success }}</td>
+<td>{{ item.response.time }}</td>
+<td><a href="http://planck.nibalizer.com/buildlogs/{{ item.log_path }}">{{item}}</a></td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock content %}

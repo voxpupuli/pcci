@@ -77,13 +77,13 @@ def show_modules():
 def show_module_by_name(module_name):
     time = str(datetime.datetime.now())
 
-    completed_length = r.llen('module_name')
+    completed_length = r.llen(module_name)
 
     # redis doesn't have an rindex and python doesnt have prepend
     # so build the list in reverse order then reverse it
     rev_completed = []
     for i in range(completed_length):
-        item = r.lindex('completed', i)
+        item = json.loads(r.lindex(module_name, i))
         #item = ('x', 'y')
         rev_completed.append(item)
 
