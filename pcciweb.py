@@ -90,7 +90,7 @@ def show_module_by_name(module_name):
 
     completed = rev_completed[::-1]
 
-    return render_template("completed.html", time=time, completed_length=completed_length, completed=completed)
+    return render_template("module.html", time=time, completed_length=completed_length, completed=completed)
 
 
 if __name__ == '__main__':
