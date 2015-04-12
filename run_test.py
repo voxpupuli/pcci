@@ -171,7 +171,7 @@ if __name__ == "__main__":
     test['response'] = response
     test['pull'] = job
     test['log_path'] = log_path
-    test['github_url'] = "https://github.com/{0}/{1}/pull/{2}".format(work_item['unique_name'].split("/"))
+    test['github_url'] = "https://github.com/{0}/{1}/pull/{2}".format(*work_item['unique_name'].split("/"))
     r.rpush(module_name, json.dumps(test))
 
     # Cleanup
