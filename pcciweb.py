@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask, render_template
 import redis
 import json
@@ -9,6 +11,7 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 @app.route('/')
 def root():
+    time = str(datetime.datetime.now())
     return render_template("index.html")
 
 
@@ -46,6 +49,7 @@ def show_queue():
 
 @app.route('/completed')
 def show_completed():
+    time = str(datetime.datetime.now())
     completed_length = r.llen('completed')
 
     # redis doesn't have an rindex and python doesnt have prepend
@@ -58,16 +62,17 @@ def show_completed():
 
     completed = rev_completed[::-1]
 
-    return render_template("completed.html", completed_length=completed_length, completed=completed)
+    return render_template("completed.html", time=time, completed_length=completed_length, completed=completed)
 
 
 @app.route('/modules')
 def show_modules():
+    time = str(datetime.datetime.now())
 
     repos = list(r.smembers('repos'))
     print repos
 
-    return render_template("modules.html", repos=repos)
+    return render_template("modules.html", time=time, repos=repos)
 
 
 if __name__ == '__main__':
