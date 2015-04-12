@@ -69,9 +69,9 @@ def show_completed():
 def show_modules():
     time = str(datetime.datetime.now())
 
-    repos = list(r.smembers('repos')).sort()
+    repos = list(r.smembers('repos'))
 
-    return render_template("modules.html", time=time, repos=repos)
+    return render_template("modules.html", time=time, repos=repos.sort())
 
 @app.route('/modules/<path:module_name>')
 def show_module_by_name(module_name):
