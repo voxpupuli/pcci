@@ -161,7 +161,7 @@ if __name__ == "__main__":
     r.rpush('completed', log_path)
 
     # record test results
-    module_name = "/".join(work_item['unique_name'].split("/")[::-1])
+    module_name = "/".join(work_item['unique_name'].split("/")[:-1])
     print "module name is {0}".format(module_name)
     test = {}
     test['unique_name'] = work_item['unique_name']
