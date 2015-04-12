@@ -70,8 +70,9 @@ def show_modules():
     time = str(datetime.datetime.now())
 
     repos = list(r.smembers('repos'))
+    repos.sort()
 
-    return render_template("modules.html", time=time, repos=repos.sort())
+    return render_template("modules.html", time=time, repos=repos)
 
 @app.route('/modules/<path:module_name>')
 def show_module_by_name(module_name):
