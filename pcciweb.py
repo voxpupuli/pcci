@@ -70,7 +70,6 @@ def show_modules():
     time = str(datetime.datetime.now())
 
     repos = list(r.smembers('repos'))
-    print repos
 
     return render_template("modules.html", time=time, repos=repos)
 
