@@ -15,10 +15,10 @@ import config
 def write_nodeset(path):
     ns = """
 HOSTS:
-  ubuntu-server-12042-x64:
+  ubuntu-server-14041-x64:
     roles:
       - master
-    platform: ubuntu-12.04-amd64
+    platform: ubuntu-14.04-amd64
     user: 'vagrant'
     password: 'vagrant'
     hypervisor : libvirt
