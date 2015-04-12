@@ -152,9 +152,24 @@ if __name__ == "__main__":
     response = {}
     tempdir = create_pr_env(work_item['unique_name'])
     response = run_beaker_rspec(tempdir)
+
+    # write log
+    print "writing log to {0}".format(log_path)
     log_path = write_log(work_item['unique_name'], response)
-    print "log written to {0}".format(log_path)
+
+    # record test results
     r.rpush('completed', log_path)
+
+    # record test results
+    module_name = "/".join(work_item['unique_name'])
+    test = {}
+    test['unique_name'] = work_item['unique_name']
+    test['response'] = response
+    test['pull'] = job
+    test['log_path'] = log_path
+    r.push(test_name, json.dumps(test))
+
+    # Cleanup
     r.srem("in_progress", work_item['unique_name'])
     print('Shutting down worker')
     r.decr('workers')
