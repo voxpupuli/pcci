@@ -9,7 +9,7 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 @app.route('/')
 def root():
-    return '<html><body><h2>Pcci Web Interface</h2><br><a href="/queue">Queue</a><br><a href="/completed">Completed</a></body></html>'
+    return render_template("index.html")
 
 
 @app.route('/queue')
@@ -58,6 +58,15 @@ def show_completed():
     return render_template("completed.html", completed_length=completed_length, completed=completed)
 
 
+@app.route('/modules')
+def show_modules():
+
+    repos = list(r.smembers('repos'))
+    print repos
+
+    return render_template("modules.html", repos=repos)
+
+
 if __name__ == '__main__':
     with open('webconfig.yaml') as f:
         conf = yaml.load(f.read())
@@ -67,8 +76,6 @@ if __name__ == '__main__':
     host = conf['host']
 
     app.run(debug=debug, host=host)
-
-
 
 
 

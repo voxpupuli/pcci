@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+<br>
+<table>
+{% for item in repos %}
+<tr><td>{{ item }}</td></tr>
+{% endfor %}
+</table>
+
+{% endblock content %}
