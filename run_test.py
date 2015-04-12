@@ -162,6 +162,7 @@ if __name__ == "__main__":
 
     # record test results
     module_name = "/".join(work_item['unique_name'].split("/"))
+    print "module name is {0}".format(module_name)
     test = {}
     test['unique_name'] = work_item['unique_name']
     test['module_name'] = module_name
