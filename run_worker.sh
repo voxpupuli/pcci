@@ -2,7 +2,7 @@
 
 while true
 do
-    sleep 30
     python run_test.py
+    sleep 30
 done
 
