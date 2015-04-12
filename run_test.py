@@ -146,7 +146,7 @@ if __name__ == "__main__":
     print "starting work on {0}".format(work_item)
     job = json.loads(r.get(work_item['unique_name']))
     now = str(datetime.datetime.now())
-    job['now'] = now
+    job['begin_test'] = now
     r.set(work_item['unique_name'], json.dumps(job))
     r.sadd("in_progress", work_item['unique_name'])
     response = {}

@@ -4,13 +4,15 @@
 <h3>Tests in progress: {{ in_progress_length }}</h3>
 <br>
 <table>
+<tr><th>Pull Request</th><th>Running Since</th></tr>
 {% for item in in_progress %}
-<tr><td>{{item.name}}</td><td>{{item.time}}</td></tr>
+<tr><td>{{item.name}}</td><td>{{item.begin_test}}</td></tr>
 {% endfor %}
 </table>
 <h3>Queue Length: {{ queue_length }}</h3>
 <br>
 <table>
+<tr><th>Pull Request</th><th>In Queue Since</th></tr>
 {% for item in queue %}
 <tr><td>{{item.name}}</td><td>{{item.time}}</td></tr>
 {% endfor %}
