@@ -69,7 +69,7 @@ def show_completed():
 def show_modules():
     time = str(datetime.datetime.now())
 
-    repos = list(r.smembers('repos'))
+    repos = list(r.smembers('repos')).sort()
 
     return render_template("modules.html", time=time, repos=repos)
 
