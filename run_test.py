@@ -147,7 +147,7 @@ if __name__ == "__main__":
     job = json.loads(r.get(work_item['unique_name']))
     now = str(datetime.datetime.now())
     job['now'] = now
-    r.set(unique_name, json.dumps(stored_pull))
+    r.set(item['unique_name', json.dumps(stored_pull))
     r.sadd("in_progress", work_item['unique_name'])
     response = {}
     tempdir = create_pr_env(work_item['unique_name'])
