@@ -14,6 +14,8 @@ def root():
 
 @app.route('/queue')
 def show_queue():
+    time = str(datetime.datetime.now())
+
     workers = r.get('workers')
 
     queue_length = r.llen('todo')
@@ -34,6 +36,7 @@ def show_queue():
 
 
     return render_template("queue.html",
+                            time=time,
                             workers=workers,
                             queue_length=queue_length,
                             queue=queue,
