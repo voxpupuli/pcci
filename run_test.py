@@ -99,8 +99,10 @@ def run_beaker_rspec(tempdir):
     # The most important metadata
     if response['success'] == 0:
         print "Tests passed"
+        response['string_success'] = 'PASS'
     else:
         print "Tests failed"
+        response['string_success'] = 'FAIL'
 
     return response
 
