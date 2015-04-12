@@ -142,11 +142,12 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
     setup_worker()
-    work_item = json.loads(r.lpop('todo'))
-    if work_item == None:
+    json_work_item = r.lpop('todo')
+    if json_work_item == None:
         print "No work to do, shutting down"
         r.decr('workers')
         sys.exit()
+    work_item = json.loads(json_work_item)
     print "starting work on {0}".format(work_item)
     job = json.loads(r.get(work_item['unique_name']))
     now = str(datetime.datetime.now())
