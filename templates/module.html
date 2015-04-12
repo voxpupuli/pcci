@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <br>
+<h2>Module: {{ item.module_name }}</h2>
 <h3>Completed Tests: {{ completed_length }}</h3>
 <table>
 <tr>
@@ -8,6 +9,7 @@
 <th>Success</td>
 <th>Seconds</td>
 <th>Log</td>
+<th>Github</td>
 </tr>
 {% for item in completed %}
 <tr>
@@ -15,6 +17,7 @@
 <td>{{ item.response.string_success }}</td>
 <td>{{ item.response.time }}</td>
 <td><a href="http://planck.nibalizer.com/buildlogs/{{ item.log_path }}">Log</a></td>
+<td><a href="http://github.com/{{ item.unique_name }}">Github</a></td>
 </tr>
 {% endfor %}
 </table>
