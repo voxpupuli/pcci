@@ -3,6 +3,12 @@
 <br>
 <h3>Completed Tests: {{ completed_length }}</h3>
 <table>
+<tr>
+<th>Module Name</td>
+<th>Success</td>
+<th>Seconds</td>
+<th>Log</td>
+</tr>
 {% for item in completed %}
 <tr>
 <td>{{ item.unique_name }}</td>
