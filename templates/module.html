@@ -1,15 +1,15 @@
 {% extends 'layout.html' %}
 {% block content %}
 <br>
-<h2>Module: {{ item.module_name }}</h2>
+<h2>Module: {{ completed[0].module_name }}</h2>
 <h3>Completed Tests: {{ completed_length }}</h3>
 <table>
 <tr>
-<th>Module Name</td>
-<th>Success</td>
-<th>Seconds</td>
-<th>Log</td>
-<th>Github</td>
+<th>Module Name</th>
+<th>Success</th>
+<th>Seconds</th>
+<th>Log</th>
+<th>Github</th>
 </tr>
 {% for item in completed %}
 <tr>
