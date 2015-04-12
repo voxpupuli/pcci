@@ -73,6 +73,7 @@ def run_beaker_rspec(tempdir):
     # Setup environment
     runenv = os.environ.copy()
     runenv["BEAKER_set"] = 'libvirt'
+    runenv["BEAKER_debug=yes"] = 'libvirt'
     runenv["GEM_HOME"] = '/home/pcci/ruby_pcci_gempath'
     runenv["PATH"] = '/home/pcci/ruby_pcci_gempath/bin:' + runenv["PATH"]
     print "Using libvirt nodeset"
