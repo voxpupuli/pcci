@@ -74,6 +74,24 @@ def show_modules():
 
     return render_template("modules.html", time=time, repos=repos)
 
+@app.route('/modules/<path:module_name>')
+def show_module_by_name(module_name):
+    time = str(datetime.datetime.now())
+
+    completed_length = r.llen('module_name')
+
+    # redis doesn't have an rindex and python doesnt have prepend
+    # so build the list in reverse order then reverse it
+    rev_completed = []
+    for i in range(completed_length):
+        item = r.lindex('completed', i)
+        #item = ('x', 'y')
+        rev_completed.append(item)
+
+    completed = rev_completed[::-1]
+
+    return render_template("completed.html", time=time, completed_length=completed_length, completed=completed)
+
 
 if __name__ == '__main__':
     with open('webconfig.yaml') as f:
