@@ -25,6 +25,8 @@ def totimestamp(dt, epoch=datetime(1970,1,1)):
 repos = config.repos
 
 for repo in repos:
+    r.sadd('repos', str(repo))
+    #from pdb import set_trace; set_trace()
     pulls = g.get_repo(repo).get_pulls()
 
     for pull in pulls:
