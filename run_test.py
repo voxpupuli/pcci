@@ -154,8 +154,8 @@ if __name__ == "__main__":
     response = run_beaker_rspec(tempdir)
 
     # write log
-    print "writing log to {0}".format(log_path)
     log_path = write_log(work_item['unique_name'], response)
+    print "log written to {0}".format(log_path)
 
     # record test results
     r.rpush('completed', log_path)
