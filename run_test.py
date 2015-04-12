@@ -167,7 +167,7 @@ if __name__ == "__main__":
     test['response'] = response
     test['pull'] = job
     test['log_path'] = log_path
-    r.push(test_name, json.dumps(test))
+    r.rpush(test_name, json.dumps(test))
 
     # Cleanup
     r.srem("in_progress", work_item['unique_name'])
