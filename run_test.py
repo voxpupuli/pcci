@@ -145,6 +145,7 @@ if __name__ == "__main__":
     work_item = json.loads(r.lpop('todo'))
     if work_item == None:
         print "No work to do, shutting down"
+        r.decr('workers')
         sys.exit()
     print "starting work on {0}".format(work_item)
     job = json.loads(r.get(work_item['unique_name']))
