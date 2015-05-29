@@ -29,7 +29,7 @@ def comment(comment_to_make):
     print "commenting on {0}".format(comment_to_make)
     #from pdb import set_trace; set_trace()
 
-    pr_object = g.get_repo(org + "/" + project).get_issue(pr)
+    pr_object = g.get_repo(org + "/" + project).get_issue(int(pr))
 
     response_string = """\
 The result of the test was: {0}
