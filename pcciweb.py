@@ -50,7 +50,7 @@ def show_queue():
 @app.route('/completed')
 def show_completed():
     time = str(datetime.datetime.now())
-    completed_length = r.llen('completed')
+    completed_length = r.llen('results')
 
     # redis doesn't have an rindex and python doesnt have prepend
     # so build the list in reverse order then reverse it

@@ -16,6 +16,7 @@ def main_loop():
             time.sleep(5)
         else:
             comment(comment_to_make)
+            r.rpush('results')
 
 
 def comment(comment_to_make):
