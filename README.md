@@ -11,7 +11,7 @@ requirements:
 * redis-server running
 * beefy machine to run tests
 
-
+A experimental instance is running at http://ci.puppet.community
 
 
 application deployment:
