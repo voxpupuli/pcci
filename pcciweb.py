@@ -56,7 +56,7 @@ def show_completed():
     # so build the list in reverse order then reverse it
     rev_completed = []
     for i in range(completed_length):
-        item = r.lindex('completed', i)
+        item = r.lindex('results', i)
         #item = ('x', 'y')
         rev_completed.append(item)
 
