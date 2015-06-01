@@ -4,7 +4,7 @@
 <br>
 <table>
 {% for item in completed %}
-<tr><td><a href="http://ci.puppet.community/buildlogs/{{ item['log_path'] }}">{{item['unique_name']}}</a></td><td>{{item['merge_commit_sha']}}</td></tr>
+<tr><td><a href="http://ci.puppet.community/buildlogs/{{ item['log_path'] }}">{{item['unique_name']}}</a></td><td>{{item['pull']['merge_commit_sha']}}</td></tr>
 {% endfor %}
 </table>
 
