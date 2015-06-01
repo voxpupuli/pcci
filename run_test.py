@@ -178,6 +178,7 @@ if __name__ == "__main__":
     test['log_path'] = log_path
     test['github_url'] = "https://github.com/{0}/{1}/pull/{2}".format(*work_item['unique_name'].split("/"))
     r.rpush(module_name, json.dumps(test))
+    r.rpush('results', json.dumps(test))
 
     # Cleanup
     r.srem("in_progress", work_item['unique_name'])
