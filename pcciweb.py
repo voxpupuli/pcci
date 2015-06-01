@@ -58,7 +58,7 @@ def show_completed():
     for i in range(completed_length):
         item = r.lindex('results', i)
         #item = ('x', 'y')
-        rev_completed.append(item)
+        rev_completed.append(json.loads(item)['unique_name'])
 
     completed = rev_completed[::-1]
 
