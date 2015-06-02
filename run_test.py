@@ -121,7 +121,7 @@ def write_log(work_item, response):
     if response['harness_failure']:
         filename = "harness_failures/" + filename
 
-    refilter = re.compile('\x1B\[[0-9;]*[a-zA-Z]')
+    refilter = re.compile(r'\x1B\[[0-9;]*[a-zA-Z]')
     with open(path + "/" + filename, 'w') as f:
         f.write("Test log\n")
         f.write("Test performed at {0} - {1}\n".format(unix_seconds, datetime.datetime.utcnow()))
