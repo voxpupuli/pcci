@@ -133,8 +133,10 @@ def write_log(work_item, response):
             f.write("Tests failed\n")
         for line in response['out'].split('\n'):
             f.write(refilter.sub('', line))
+            f.write('\n')
         for line in response['err'].split('\n'):
             f.write(refilter.sub('', line))
+            f.write('\n')
     f.closed
     return (filename)
 
