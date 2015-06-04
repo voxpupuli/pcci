@@ -6,7 +6,7 @@ from github import Github
 import config
 import time
 
-# puppet-community-ci+test+1+1424905505+FAIL
+# puppet-community-ci+test+3+1424905505+FAIL
 
 def main_loop():
     while True:
@@ -20,26 +20,27 @@ def main_loop():
 
 def comment(comment_to_make):
     org, project, pr, ts, success = comment_to_make.split('+')
+    print "Considering: {0}".format(comment_to_make)
+    print "org: {0}, project: {1}, pr {2}".format(org, project,pr)
 
-    if project in config.commentable:
-        pass
-    else:
+    if project not in config.commentable:
         return
 
-    print "commenting on {0}".format(comment_to_make)
-    #from pdb import set_trace; set_trace()
+    pr_object = g.get_repo(org + "/" + project).get_pull(int(pr))
+    sha = pr_object.head.sha
+    print "sha: {0}".format(sha)
+    commits = pr_object.get_commits()
+    commit = None
+    for c in commits:
+        if c.sha == sha:
+            commit = c
+            break
 
-    pr_object = g.get_repo(org + "/" + project).get_issue(int(pr))
-
-    response_string = """\
-The result of the test was: {0}
-Details at {1}{2}
-
-I am a beta ci bot. I am probably lying to you.
-You can contact nibalizer for more details."""\
-        .format(success, config.rooturl, comment_to_make)
-
-    pr_object.create_comment(response_string)
+    if success == 'PASS':
+        status = 'success'
+    else:
+        status = 'failure'
+    commit.create_status(status, target_url="{0}{1}".format(config.rooturl, comment_to_make), description="PCCI Voting System", context="continuous-integration/pcci")
 
 
 if __name__ == "__main__":
