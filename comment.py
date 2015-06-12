@@ -45,8 +45,9 @@ def comment(comment_to_make):
 
 if __name__ == "__main__":
 
-    g = Github("puppet-community-ci", config.password)
+    g = Github(config.pccibottoken)
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
+    #comment("puppet-community+pcci+10+1424905505+FAIL")
 
     main_loop()
 
