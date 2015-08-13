@@ -16,7 +16,7 @@
     {% set success=True %}
   {% else %}
     {% set success=False %}
-  {% endif %
+  {% endif %}
   <tr {% if not success %}class="danger"{% endif %}>
     <td>{{ item.unique_name }}</td>
     <td>{{ item.response.string_success }}</td>
