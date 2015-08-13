@@ -1,26 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<style>
-body{
-  font-family: sans-serif;
-}
-tbody tr:nth-child(odd) {
-   background-color: #ccc;
-}
-</style>
-<title>PCCI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/sandstone/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <title>PCCI</title>
 </head>
+
 <body>
-<h1>PCCI</h1>
-<a href="/queue">Queue</a>
-<a href="/completed">Completed</a>
-<a href="/modules">Modules</a>
-<a href="/buildlogs">Raw Builds</a>
-<a href="/">About</a>
-<p>
-All times are UTC. Current time in UTC is {{time}}
-<br>
-{% block content %} {% endblock content %}
+
+  <nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">PCCI</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/queue">Queue</a></li>
+          <li><a href="/completed">Completed</a></li>
+          <li><a href="/modules">Modules</a></li>
+          <li><a href="/buildlogs">Raw build</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="https://github.com/puppet-community/pcci"><i class="fa fa-github"></i> Github</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <div class="container">
+    {% block content %} {% endblock content %}
+  </div>
+  <div class="container">
+    <p><b>All times are in UTC. The current time in UTC is: {{utcnow()}}</b></p>
+  </div>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 </body>
+
 </html>

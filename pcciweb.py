@@ -9,6 +9,11 @@ app = Flask(__name__)
 
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
+def utcnow():
+    return datetime.datetime.utcnow().time()
+
+app.jinja_env.globals.update(utcnow=utcnow)
+
 @app.route('/')
 def root():
     time = str(datetime.datetime.now())
@@ -17,8 +22,6 @@ def root():
 
 @app.route('/queue')
 def show_queue():
-    time = str(datetime.datetime.now())
-
     workers = r.get('workers')
 
     queue_length = r.llen('todo')
@@ -39,7 +42,6 @@ def show_queue():
 
 
     return render_template("queue.html",
-                            time=time,
                             workers=workers,
                             queue_length=queue_length,
                             queue=queue,
@@ -49,7 +51,6 @@ def show_queue():
 
 @app.route('/completed')
 def show_completed():
-    time = str(datetime.datetime.now())
     completed_length = r.llen('results')
 
     # redis doesn't have an rindex and python doesnt have prepend
@@ -62,22 +63,18 @@ def show_completed():
 
     completed = rev_completed[::-1]
 
-    return render_template("completed.html", time=time, completed_length=completed_length, completed=completed)
+    return render_template("completed.html", completed_length=completed_length, completed=completed)
 
 
 @app.route('/modules')
 def show_modules():
-    time = str(datetime.datetime.now())
-
     repos = list(r.smembers('repos'))
     repos.sort()
 
-    return render_template("modules.html", time=time, repos=repos)
+    return render_template("modules.html", repos=repos)
 
 @app.route('/modules/<path:module_name>')
 def show_module_by_name(module_name):
-    time = str(datetime.datetime.now())
-
     completed_length = r.llen(module_name)
 
     # redis doesn't have an rindex and python doesnt have prepend
@@ -90,7 +87,7 @@ def show_module_by_name(module_name):
 
     completed = rev_completed[::-1]
 
-    return render_template("module.html", time=time, module_name=module_name, completed_length=completed_length, completed=completed)
+    return render_template("module.html", module_name=module_name, completed_length=completed_length, completed=completed)
 
 
 if __name__ == '__main__':
@@ -102,6 +99,3 @@ if __name__ == '__main__':
     host = conf['host']
 
     app.run(debug=debug, host=host)
-
-
-
