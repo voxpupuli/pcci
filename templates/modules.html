@@ -1,10 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
-<br>
-<table>
-{% for item in repos %}
-<tr><td><a href="/modules/{{ item }}">{{item}}</a></td></tr>
-{% endfor %}
+
+<h2>Modules</h2>
+<table class="table table-hover">
+  <tr><th>Module</th></tr>
+  {% for item in repos %}
+  <tr><td><a href="/modules/{{ item }}">{{item}}</a></td></tr>
+  {% endfor %}
 </table>
 
 {% endblock content %}

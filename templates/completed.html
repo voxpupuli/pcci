@@ -1,11 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h3>Completed Tests: {{ completed_length }}</h3>
-<br>
-<table>
-{% for item in completed %}
-<tr><td><a href="http://ci.puppet.community/buildlogs/{{ item['log_path'] }}">{{item['unique_name']}}</a></td><td>{{item['pull']['merge_commit_sha']}}</td></tr>
-{% endfor %}
+
+<h2>Completed Tests: {{ completed_length }}</h2>
+<table class="table table-hover">
+  <tr><th>Module</th><th>Commit SHA</th></tr>
+  {% for item in completed %}
+  <tr><td><a href="http://ci.puppet.community/buildlogs/{{ item['log_path'] }}">{{item['unique_name']}}</a></td><td>{{item['pull']['merge_commit_sha']}}</td></tr>
+  {% endfor %}
 </table>
 
 {% endblock content %}

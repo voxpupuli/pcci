@@ -1,21 +1,25 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h3>Workers Running (or crashed): {{ workers }}</h3>
-<h3>Tests in progress: {{ in_progress_length }}</h3>
-<br>
-<table>
-<tr><th>Pull Request</th><th>Running Since</th></tr>
-{% for item in in_progress %}
-<tr><td>{{item.name}}</td><td>{{item.begin_test}}</td></tr>
-{% endfor %}
-</table>
-<h3>Queue Length: {{ queue_length }}</h3>
-<br>
-<table>
-<tr><th>Pull Request</th><th>In Queue Since</th></tr>
-{% for item in queue %}
-<tr><td>{{item.name}}</td><td>{{item.time}}</td></tr>
-{% endfor %}
-</table>
+<h2>Workers Running (or crashed): {{ workers }}</h2>
+<div class="row">
+  <div class="col-md-6">
+    <h2>Tests in progress: {{ in_progress_length }}</h2>
+    <table class="table table-hover">
+    <tr><th>Pull Request</th><th>Running Since</th></tr>
+    {% for item in in_progress %}
+    <tr><td>{{item.name}}</td><td>{{item.begin_test}}</td></tr>
+    {% endfor %}
+    </table>
+  </div>
+  <div class="col-md-6">
+    <h2>Queue Length: {{ queue_length }}</h2>
+    <table class="table table-hover">
+    <tr><th>Pull Request</th><th>In Queue Since</th></tr>
+    {% for item in queue %}
+    <tr><td>{{item.name}}</td><td>{{item.time}}</td></tr>
+    {% endfor %}
+    </table>
+  </div>
+</div>
 
 {% endblock content %}
