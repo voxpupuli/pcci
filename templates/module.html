@@ -12,7 +12,12 @@
     <th>Github</th>
   </tr>
   {% for item in completed %}
-  <tr>
+  {% if item['response']['success'] == 0 %}
+    {% set success=True %}
+  {% else %}
+    {% set success=False %}
+  {% endif %
+  <tr {% if not success %}class="danger"{% endif %}>
     <td>{{ item.unique_name }}</td>
     <td>{{ item.response.string_success }}</td>
     <td>{{ item.response.time }}</td>
