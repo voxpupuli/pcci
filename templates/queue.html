@@ -7,7 +7,8 @@
     <table class="table table-hover">
     <tr><th>Pull Request</th><th>Running Since</th></tr>
     {% for item in in_progress %}
-    <tr><td>{{item.name}}</td><td>{{item.begin_test}}</td></tr>
+    {% set prlist = item.name.split('/') %}
+    <tr><td><a href="https://github.com/{{prlist[0]}}/{{prlist[1]}}/pull/{{prlist[2]}}">{{item.name}}</a></td><td>{{item.begin_test}}</td></tr>
     {% endfor %}
     </table>
   </div>
@@ -16,7 +17,8 @@
     <table class="table table-hover">
     <tr><th>Pull Request</th><th>In Queue Since</th></tr>
     {% for item in queue %}
-    <tr><td>{{item.name}}</td><td>{{item.time}}</td></tr>
+    {% set prlist = item.name.split('/') %}
+    <tr><td><a href="https://github.com/{{prlist[0]}}/{{prlist[1]}}/pull/{{prlist[2]}}">{{item.name}}</a></td><td>{{item.time}}</td></tr>
     {% endfor %}
     </table>
   </div>
