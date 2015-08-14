@@ -73,6 +73,7 @@ def run_beaker_rspec(tempdir):
 
     # Setup environment
     runenv = os.environ.copy()
+    runenv["BEAKER_set"] = 'libvirt'
     runenv["BEAKER_debug"] = 'yes'
     runenv["GEM_HOME"] = '/home/pcci/new_ruby_gems_home'
     runenv["PATH"] = '/home/pcci/new_ruby_gems_home/bin:' + runenv["PATH"]
