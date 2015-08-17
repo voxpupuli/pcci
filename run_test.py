@@ -91,12 +91,14 @@ def run_beaker_rspec(tempdir):
     t_delta = t2 - t1
 
     # Setup response object
-    response = { 'out'     : out,
-                 'err'     : err,
-                 'success' : int(beaker.returncode),
-                 'time'    : int(t_delta.seconds),
-                 'harness_failure': False,
-                 }
+    response = {'out':               out,
+                'err':               err,
+                'success':           int(beaker.returncode),
+                'time':              int(t_delta.seconds),
+                'date':              datetime.datetime.utcnow(),
+                'date_unix_seconds': datetime.datetime.utcnow().strftime('%s'),
+                'harness_failure': False,
+                }
 
     # The most important metadata
     if response['success'] == 0:
