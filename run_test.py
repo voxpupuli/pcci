@@ -97,7 +97,7 @@ def run_beaker_rspec(tempdir):
                 'err':               err,
                 'success':           int(beaker.returncode),
                 'time':              int(t_delta.seconds),
-                'date':              datetime.datetime.utcnow(),
+                'date':              str(datetime.datetime.utcnow()),
                 'date_unix_seconds': datetime.datetime.utcnow().strftime('%s'),
                 'harness_failure': False,
                 }
