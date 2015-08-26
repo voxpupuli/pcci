@@ -15,6 +15,7 @@ import redis
 
 import config
 
+
 def write_nodeset(path):
     ns = """
 HOSTS:
@@ -30,13 +31,14 @@ HOSTS:
 CONFIG:
   type: foss
     """
+
     with open(path, 'w') as f:
         f.write(ns)
     f.closed
 
 
 def setup_worker():
-    #register as a worker
+    # register as a worker
     workers = r.get('workers')
     if workers is None:
         r.set('workers', 0)
@@ -50,7 +52,7 @@ def setup_worker():
 
 
 def signal_handler(signal, frame):
-    print('Shutting down worker')
+    print 'Shutting down worker'
     r.decr('workers')
     sys.exit(0)
 
@@ -59,10 +61,21 @@ def create_pr_env(work_item):
     print "working on {0}".format(work_item)
     org, project, pr = work_item.split('/')
     tempdir = tempfile.mkdtemp()
-    git_clone = subprocess.call(["git", "clone", "https://github.com/{0}/{1}".format(org, project), tempdir + "/job"])
+    git_clone = subprocess.call(["git",
+                                 "clone",
+                                 "https://github.com/{0}/{1}".format(org,
+                                                                     project),
+                                 tempdir + "/job"])
     if pr != 'master':
-        subprocess.Popen(["git", "fetch", "origin", "pull/{0}/head:pr_{0}".format(pr)], cwd=(tempdir + "/job")).communicate()
-        subprocess.Popen(["git", "checkout", "pr_{0}".format(pr)], cwd=(tempdir + "/job")).communicate()
+        subprocess.Popen(["git",
+                          "fetch",
+                          "origin",
+                          "pull/{0}/head:pr_{0}".format(pr)],
+                         cwd=(tempdir + "/job")).communicate()
+        subprocess.Popen(["git",
+                          "checkout",
+                          "pr_{0}".format(pr)],
+                         cwd=(tempdir + "/job")).communicate()
     return str(tempdir)
 
 
@@ -85,7 +98,11 @@ def run_beaker_rspec(tempdir):
     write_nodeset(jobdir + '/spec/acceptance/nodesets/libvirt.yml')
 
     # Run the test
-    beaker = subprocess.Popen(["rspec", "spec/acceptance"], cwd=jobdir, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=runenv)
+    beaker = subprocess.Popen(["rspec", "spec/acceptance"],
+                              cwd=jobdir,
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE,
+                              env=runenv)
     out, err = beaker.communicate()
 
     # Record endtime, calculate t delta
@@ -121,14 +138,19 @@ def write_log(work_item, response):
     else:
         succ = 'FAIL'
     unix_seconds = datetime.datetime.utcnow().strftime('%s')
-    filename =  "{0}+{1}+{2}+{3}+{4}".format(org,project,pr,unix_seconds,succ)
+    filename = "{0}+{1}+{2}+{3}+{4}".format(org,
+                                            project,
+                                            pr,
+                                            unix_seconds,
+                                            succ)
     if response['harness_failure']:
         filename = "harness_failures/" + filename
 
     refilter = re.compile(r'\x1B\[[0-9;]*[a-zA-Z]')
     with open(path + "/" + filename, 'w') as f:
         f.write("Test log\n")
-        f.write("Test performed at {0} - {1}\n".format(unix_seconds, datetime.datetime.utcnow()))
+        f.write("Test performed at {0} - {1}\n".format(unix_seconds,
+                                                       datetime.datetime.utcnow()))
         f.write("{0}/{1} PR # {2}\n".format(org, project, pr))
         f.write("Took {0} Seconds\n".format(response['time']))
         if response['success'] == 0:
@@ -145,13 +167,12 @@ def write_log(work_item, response):
     return (filename)
 
 
-
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal_handler)
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
     setup_worker()
     json_work_item = r.lpop('todo')
-    if json_work_item == None:
+    if json_work_item is None:
         print "No work to do, shutting down"
         r.decr('workers')
         sys.exit()
@@ -188,7 +209,5 @@ if __name__ == "__main__":
 
     # Cleanup
     r.srem("in_progress", work_item['unique_name'])
-    print('Shutting down worker')
+    print 'Shutting down worker'
     r.decr('workers')
-
-
