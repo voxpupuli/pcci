@@ -8,7 +8,8 @@ from github import Github
 from datetime import datetime, timedelta
 import config
 
-g = Github("puppet-community-ci", config.password)
+#g = Github(config.username, config.password)
+g = Github(config.pccibottoken)
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
