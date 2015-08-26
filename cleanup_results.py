@@ -33,6 +33,5 @@ for i in range(completed_length):
         indexes.append(i)
 
 
-print i
 print len(indexes)
 print completed_length

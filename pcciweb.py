@@ -9,14 +9,16 @@ app = Flask(__name__)
 
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
+
 def utcnow():
     return datetime.datetime.utcnow().time()
 
 app.jinja_env.globals.update(utcnow=utcnow)
 
+
 @app.route('/')
 def root():
-    time = str(datetime.datetime.now())
+    # time = str(datetime.datetime.now())
     return render_template("index.html")
 
 
@@ -29,7 +31,7 @@ def show_queue():
     for i in range(queue_length):
         name = json.loads(r.lindex('todo', i))['unique_name']
         item = json.loads(r.get(name))
-        #item = ('x', 'y')
+        # item = ('x', 'y')
         queue.append(item)
 
     in_progress_names = r.smembers('in_progress')
@@ -37,16 +39,15 @@ def show_queue():
     in_progress = []
     for name in in_progress_names:
         item = json.loads(r.get(name))
-        #item = ('x', 'y')
+        # item = ('x', 'y')
         in_progress.append(item)
 
-
     return render_template("queue.html",
-                            workers=workers,
-                            queue_length=queue_length,
-                            queue=queue,
-                            in_progress_length=in_progress_length,
-                            in_progress=in_progress)
+                           workers=workers,
+                           queue_length=queue_length,
+                           queue=queue,
+                           in_progress_length=in_progress_length,
+                           in_progress=in_progress)
 
 
 @app.route('/completed')
@@ -58,12 +59,14 @@ def show_completed():
     rev_completed = []
     for i in range(completed_length):
         item = r.lindex('results', i)
-        #item = ('x', 'y')
+        # item = ('x', 'y')
         rev_completed.append(json.loads(item))
 
     completed = rev_completed[::-1]
 
-    return render_template("completed.html", completed_length=completed_length, completed=completed)
+    return render_template("completed.html",
+                           completed_length=completed_length,
+                           completed=completed)
 
 
 @app.route('/modules')
@@ -72,6 +75,7 @@ def show_modules():
     repos.sort()
 
     return render_template("modules.html", repos=repos)
+
 
 @app.route('/modules/<path:module_name>')
 def show_module_by_name(module_name):
@@ -82,12 +86,15 @@ def show_module_by_name(module_name):
     rev_completed = []
     for i in range(completed_length):
         item = json.loads(r.lindex(module_name, i))
-        #item = ('x', 'y')
+        # item = ('x', 'y')
         rev_completed.append(item)
 
     completed = rev_completed[::-1]
 
-    return render_template("module.html", module_name=module_name, completed_length=completed_length, completed=completed)
+    return render_template("module.html",
+                           module_name=module_name,
+                           completed_length=completed_length,
+                           completed=completed)
 
 
 if __name__ == '__main__':

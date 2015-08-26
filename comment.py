@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#from pdb import set_trace; set_trace()
+# from pdb import set_trace; set_trace()
 
 import redis
 from github import Github
@@ -8,6 +8,7 @@ import config
 import time
 
 # puppet-community-ci+test+3+1424905505+FAIL
+
 
 def main_loop():
     while True:
@@ -22,7 +23,7 @@ def main_loop():
 def comment(comment_to_make):
     org, project, pr, ts, success = comment_to_make.split('+')
     print "Considering: {0}".format(comment_to_make)
-    print "org: {0}, project: {1}, pr {2}".format(org, project,pr)
+    print "org: {0}, project: {1}, pr {2}".format(org, project, pr)
 
     if project not in config.commentable:
         return
@@ -41,7 +42,11 @@ def comment(comment_to_make):
         status = 'success'
     else:
         status = 'failure'
-    commit.create_status(status, target_url="{0}{1}".format(config.rooturl, comment_to_make), description="PCCI Voting System", context="continuous-integration/pcci")
+    commit.create_status(status,
+                         target_url="{0}{1}".format(config.rooturl,
+                                                    comment_to_make),
+                         description="PCCI Voting System",
+                         context="continuous-integration/pcci")
 
 
 if __name__ == "__main__":
@@ -50,8 +55,3 @@ if __name__ == "__main__":
     r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
     main_loop()
-
-
-
-
-
