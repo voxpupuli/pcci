@@ -16,27 +16,6 @@ import redis
 import config
 
 
-def write_nodeset(path):
-    ns = """
-HOSTS:
-  ubuntu-server-14041-x64:
-    roles:
-      - master
-    platform: ubuntu-14.04-amd64
-    user: 'vagrant'
-    password: 'vagrant'
-    hypervisor : libvirt
-    qcow2: '/home/pcci/sandbox/ubuntuvagrant.qcow2'
-    private_key_file: '/home/pcci/.vagrant_private.key'
-CONFIG:
-  type: foss
-    """
-
-    with open(path, 'w') as f:
-        f.write(ns)
-    f.closed
-
-
 def setup_worker():
     # register as a worker
     workers = r.get('workers')
@@ -79,7 +58,7 @@ def create_pr_env(work_item):
     return str(tempdir)
 
 
-def run_beaker_rspec(tempdir):
+def run_beaker_rspec(work_item, tempdir):
     # Record starttime
     t1 = datetime.datetime.utcnow()
 
@@ -95,7 +74,8 @@ def run_beaker_rspec(tempdir):
     print "Using libvirt nodeset"
 
     # Write out nodeset file
-    write_nodeset(jobdir + '/spec/acceptance/nodesets/libvirt.yml')
+    with open(jobdir + '/spec/acceptance/nodesets/libvirt.yml', 'w') as f:
+        f.write(config.nodeset[work_item['nodeset']])
 
     # Run the test
     beaker = subprocess.Popen(["rspec", "spec/acceptance"],
@@ -116,6 +96,7 @@ def run_beaker_rspec(tempdir):
                 'time':              int(t_delta.seconds),
                 'date':              datetime.datetime.utcnow(),
                 'date_unix_seconds': datetime.datetime.utcnow().strftime('%s'),
+                'nodeset':           work_item['nodeset'],
                 'harness_failure': False,
                 }
 
@@ -185,7 +166,7 @@ if __name__ == "__main__":
     r.sadd("in_progress", work_item['unique_name'])
     response = {}
     tempdir = create_pr_env(work_item['unique_name'])
-    response = run_beaker_rspec(tempdir)
+    response = run_beaker_rspec(work_item, tempdir)
 
     # write log
     log_path = write_log(work_item['unique_name'], response)
