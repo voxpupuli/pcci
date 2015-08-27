@@ -53,5 +53,8 @@ for repo in repos:
             stored_pull['merge_commit_sha'] = current_merge_commit_sha
             job = {}
             job['unique_name'] = unique_name
+            job['nodeset'] = 'trusty'
+            r.rpush('todo', json.dumps(job))
+            job['nodeset'] = 'centos7'
             r.rpush('todo', json.dumps(job))
         r.set(unique_name, json.dumps(stored_pull))
