@@ -163,7 +163,7 @@ if __name__ == "__main__":
     now = str(datetime.datetime.now())
     job['begin_test'] = now
     r.set(work_item['unique_name'], json.dumps(job))
-    r.sadd("in_progress", work_item['unique_name'])
+    r.sadd("in_progress", work_item['unique_name'] + '-' + work_item['nodeset'])
     response = {}
     tempdir = create_pr_env(work_item['unique_name'])
     response = run_beaker_rspec(work_item, tempdir)
@@ -190,6 +190,6 @@ if __name__ == "__main__":
     r.rpush('results', json.dumps(test))
 
     # Cleanup
-    r.srem("in_progress", work_item['unique_name'])
+    r.srem("in_progress", work_item['unique_name'] + '-' + work_item['nodeset'])
     print 'Shutting down worker'
     r.decr('workers')
