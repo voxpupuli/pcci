@@ -8,6 +8,7 @@
     <th>Module Name</th>
     <th>Success</th>
     <th>Seconds</th>
+    <th>Nodeset</th>
     <th>Log</th>
     <th>Github</th>
   </tr>
@@ -21,6 +22,7 @@
     <td>{{ item.unique_name }}</td>
     <td>{{ item.response.string_success }}</td>
     <td>{{ item.response.time }}</td>
+    <td>{{ item.nodeset }}</td>
     <td><a href="http://ci.puppet.community/buildlogs/{{ item.log_path }}">Log</a></td>
     <td><a href="{{ item.github_url}}">Github</a></td>
   </tr>
