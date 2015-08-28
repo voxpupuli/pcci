@@ -180,6 +180,7 @@ if __name__ == "__main__":
     print "module name is {0}".format(module_name)
     test = {}
     test['unique_name'] = work_item['unique_name']
+    test['nodeset'] = work_item['nodeset']
     test['module_name'] = module_name
     test['response'] = response
     test['pull'] = job
