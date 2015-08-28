@@ -71,7 +71,7 @@ def run_beaker_rspec(work_item, tempdir):
     runenv["BEAKER_debug"] = 'yes'
     runenv["GEM_HOME"] = '/home/pcci/new_ruby_gems_home'
     runenv["PATH"] = '/home/pcci/new_ruby_gems_home/bin:' + runenv["PATH"]
-    print "Using libvirt nodeset"
+    print "Using libvirt nodeset: {0}".format(work_item['nodeset'])
 
     # Write out nodeset file
     with open(jobdir + '/spec/acceptance/nodesets/libvirt.yml', 'w') as f:
