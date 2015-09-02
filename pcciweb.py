@@ -38,7 +38,8 @@ def show_queue():
     in_progress_length = len(in_progress_names)
     in_progress = []
     for name in in_progress_names:
-        item = json.loads(r.get(name))
+        nodeless_name = "-".join(name.split('-')[:-1])
+        item = json.loads(r.get(nodeless_name))
         # item = ('x', 'y')
         in_progress.append(item)
 
