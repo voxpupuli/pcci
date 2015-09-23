@@ -28,7 +28,7 @@ ddd-define-vm testcentos7 `pwd`/testcentos7.qcow2
 virsh start testcentos7
 echo 'sleep 4'
 sleep 40
-mac=$(virsh domiflist testcentos7 | awk '/vnet/ {print $5}')
+mac=$(virsh domiflist testcentos7 | grep -oE "([0-9a-f]{2}:){5}[0-9a-f]{2}")
 
 ip_addr=$(ip -4 n | awk -v mac="$mac" '$0 ~ mac {print $1}')
 
