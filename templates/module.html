@@ -25,7 +25,13 @@
     <td align='center'><span class="glyphicon {{ icon_class }}" aria-hidden="true" style="color: {{ icon_color }}; text-align: center;"></span></td>
     <td><a href='{{ item.github_url }}' style="color: {{ icon_color }}">{{ "PR #" + item.pr_num }}</a></td>
     <td>{{ item.response.time }}</td>
-    <td>{{ item.nodeset }}</td>
+  {% if item.nodeset == "trusty" %}
+     {% set logo_img="ubuntu.logo.png" %}
+  {% else %}
+     {% set logo_img="centos.logo.png" %}
+  {% endif  %}
+
+    <td><img src="{{ url_for('static', filename='img/' + logo_img)}}" height=20px; width=20px;>&nbsp;&nbsp;{{ item.nodeset }}</td>
     <td><a href="http://ci.puppet.community/buildlogs/{{ item.log_path }}">View</a></td>
   </tr>
   {% endfor %}
