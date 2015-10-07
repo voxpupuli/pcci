@@ -1,28 +1,32 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-<h2>Module: {{ module_name }}</h2>
+<h2>{{ module_name }}</h2>
 <h3>Completed Tests: {{ completed_length }}</h3>
 <table class="table table-hover">
   <tr>
-    <th>Pull Request</th>
-    <th>Success</th>
-    <th>Seconds</th>
-    <th>Nodeset</th>
-    <th>Log</th>
+    <th>&nbsp;</th>
+    <th><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span> Pull Request</th>
+    <th><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Seconds</th>
+    <th><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span> Nodeset</th>
+    <th><span class="glyphicon glyphicon-open-file" aria-hidden="true"></span> Log</th>
   </tr>
   {% for item in completed %}
   {% if item['response']['success'] == 0 %}
     {% set success=True %}
+    {% set icon_class="glyphicon-ok" %}
+    {% set icon_color="green" %}
   {% else %}
     {% set success=False %}
+    {% set icon_class="glyphicon-remove" %}
+    {% set icon_color="#B00000" %}
   {% endif %}
-  <tr {% if not success %}class="danger"{% endif %}>
-    <td><a href='{{ item.github_url }}'>{{ "PR #" + item.pr_num }}</a></td>
-    <td>{{ item.response.string_success }}</td>
+  <tr>
+    <td align='center'><span class="glyphicon {{ icon_class }}" aria-hidden="true" style="color: {{ icon_color }}; text-align: center;"></span></td>
+    <td><a href='{{ item.github_url }}' style="color: {{ icon_color }}">{{ "PR #" + item.pr_num }}</a></td>
     <td>{{ item.response.time }}</td>
     <td>{{ item.nodeset }}</td>
-    <td><a href="http://ci.puppet.community/buildlogs/{{ item.log_path }}">Log</a></td>
+    <td><a href="http://ci.puppet.community/buildlogs/{{ item.log_path }}">View</a></td>
   </tr>
   {% endfor %}
 </table>
