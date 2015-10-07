@@ -10,8 +10,8 @@ import subprocess
 import sys
 import tempfile
 import time
-
 import redis
+import yaml
 
 import config
 
@@ -74,8 +74,7 @@ def run_beaker_rspec(work_item, tempdir):
     print "Using libvirt nodeset: {0}".format(work_item['nodeset'])
 
     # Write out nodeset file
-    with open(jobdir + '/spec/acceptance/nodesets/libvirt.yml', 'w') as f:
-        f.write(config.nodeset[work_item['nodeset']])
+    shutil.copy('nodesets/' + work_item['nodeset'] + '.yml', jobdir + '/spec/acceptance/nodesets/libvirt.yml')
 
     # Run the test
     beaker = subprocess.Popen(["rspec", "spec/acceptance"],

@@ -1,0 +1,12 @@
+HOSTS:
+  ubuntu-server-14041-x64:
+    roles:
+      - master
+    platform: ubuntu-14.04-amd64
+    user: 'vagrant'
+    password: 'vagrant'
+    hypervisor : libvirt
+    qcow2: '/home/pcci/srv/trustyvagrant.qcow2'
+    private_key_file: '/home/pcci/.vagrant_private.key'
+CONFIG:
+  type: foss

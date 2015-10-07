@@ -1,0 +1,12 @@
+HOSTS:
+  centos-7-1505-x86_64:
+    roles:
+      - master
+    platform: centos-7-1505-x86_64
+    user: 'vagrant'
+    password: 'vagrant'
+    hypervisor : libvirt
+    qcow2: '/home/pcci/srv/centos7vagrant.qcow2'
+    private_key_file: '/home/pcci/.vagrant_private.key'
+CONFIG:
+  type: foss

@@ -4,9 +4,10 @@
 
 import redis
 import json
-from github import Github
+from github import Github, UnknownObjectException
 from datetime import datetime, timedelta
 import config
+import yaml
 
 # g = Github(config.username, config.password)
 g = Github(config.pccibottoken)
@@ -53,8 +54,16 @@ for repo in repos:
             stored_pull['merge_commit_sha'] = current_merge_commit_sha
             job = {}
             job['unique_name'] = unique_name
-            job['nodeset'] = 'trusty'
-            r.rpush('todo', json.dumps(job))
-            job['nodeset'] = 'centos7'
-            r.rpush('todo', json.dumps(job))
+
+            try:
+              pcci_file = yaml.load(g.get_repo(repo).get_contents('.pcci.yml'))
+              os_sets = []
+              os_sets.append(pcci_file['nodesets'])
+            except UnknownObjectException,e:
+              os_sets = ['trusty','centos7']
+
+            for os_set in os_sets:
+                job['nodeset'] = os_set
+                r.rpush('todo', json.dumps(job))
+
         r.set(unique_name, json.dumps(stored_pull))
