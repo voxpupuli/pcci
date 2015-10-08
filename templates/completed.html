@@ -28,7 +28,7 @@
     {% else %}
         {% set logo_img="centos.logo.png" %}
     {% endif %}
-        <img src="{{ url_for('static', filename='img/' + logo_img)}}" height=20px; width=20px; alt={{ item.nodeset }}>
+        <img src="{{ url_for('static', filename='img/' + logo_img)}}" height=20px; width=20px; alt={{ item.nodeset }}> {{ item.nodeset }}
     </td>
     <td>{{ item['pull']['begin_test'] }}</a></td>
   </tr>
