@@ -90,6 +90,7 @@ def show_module_by_name(module_name):
         # item = ('x', 'y')
         pr_num = item['unique_name'].split('/')[2]
         item['pr_num'] = pr_num  # We should probably do this in the backend.
+        item['response']['time'] = str(datetime.timedelta(seconds=item['response']['time']))
         rev_completed.append(item)
 
     completed = rev_completed[::-1]
