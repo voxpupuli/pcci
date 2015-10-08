@@ -59,9 +59,11 @@ def show_completed():
     # so build the list in reverse order then reverse it
     rev_completed = []
     for i in range(completed_length):
-        item = r.lindex('results', i)
+        item = json.loads(r.lindex('results', i))
         # item = ('x', 'y')
-        rev_completed.append(json.loads(item))
+        timestamp = datetime.datetime.strptime(item['pull']['begin_test'].split('.')[0], "%Y-%m-%d %H:%M:%S")
+        item['pull']['begin_test'] = timestamp.strftime('%I:%M %p on %D')
+        rev_completed.append(item)
 
     completed = rev_completed[::-1]
 
