@@ -172,10 +172,8 @@ if __name__ == "__main__":
     log_path = write_log(work_item['unique_name'], response)
     print "log written to {0}".format(log_path)
 
-    # record test results
-    r.rpush('completed', log_path)
+    # build test report object
 
-    # record test results
     module_name = "/".join(work_item['unique_name'].split("/")[:-1])
     print "module name is {0}".format(module_name)
     test = {}
@@ -184,8 +182,16 @@ if __name__ == "__main__":
     test['module_name'] = module_name
     test['response'] = response
     test['pull'] = job
+    test['ts'] = response['date_unix_seconds']
+    test['success'] = response['success']
     test['log_path'] = log_path
+    test['pr'] = work_item['unique_name'].split('/')[2]
     test['github_url'] = "https://github.com/{0}/{1}/pull/{2}".format(*work_item['unique_name'].split("/"))
+
+    # record test results in github
+    r.rpush('completed', json.dumps(test))
+
+    # record test results in redis
     r.rpush(module_name, json.dumps(test))
     r.rpush('results', json.dumps(test))
 

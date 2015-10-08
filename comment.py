@@ -12,7 +12,7 @@ import time
 
 def main_loop():
     while True:
-        comment_to_make = r.lpop('completed')
+        comment_to_make = json.loads(r.lpop('completed'))
         if comment_to_make is None:
             print "looping"
             time.sleep(5)
@@ -21,7 +21,10 @@ def main_loop():
 
 
 def comment(comment_to_make):
-    org, project, pr, ts, success = comment_to_make.split('+')
+    org, project, pr = comment_to_make['unique_name'].split('/')
+    ts = comment_to_make['ts']
+    nodeset = comment_to_make['nodeset']
+    success = comment_to_make['success']
     print "Considering: {0}".format(comment_to_make)
     print "org: {0}, project: {1}, pr {2}".format(org, project, pr)
 
@@ -38,7 +41,7 @@ def comment(comment_to_make):
             commit = c
             break
 
-    if success == 'PASS':
+    if success == 0:
         status = 'success'
     else:
         status = 'failure'
@@ -46,7 +49,7 @@ def comment(comment_to_make):
                          target_url="{0}{1}".format(config.rooturl,
                                                     comment_to_make),
                          description="PCCI Voting System",
-                         context="continuous-integration/pcci")
+                         context="continuous-integration/pcci-{0}".format(nodeset))
 
 
 if __name__ == "__main__":
