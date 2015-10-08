@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import redis
 import json
 import yaml
@@ -78,6 +78,18 @@ def show_modules():
     repos.sort()
 
     return render_template("modules.html", repos=repos)
+
+
+
+@app.route('/rechecks', methods=['GET', 'POST'])
+def rechecks():
+    time = str(datetime.datetime.now())
+    if request.method == 'POST':
+        # validate
+        if len(request.form['recheck'].split('/')) == 3:
+            r.delete("{0}".format(request.form['recheck']))
+
+    return render_template("rechecks.html", time=time)
 
 
 @app.route('/modules/<path:module_name>')

@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+<br>
+<h2>Recheck</h2>
+    <form action='/rechecks' method='post'>
+      <textarea id='reportInput' name='recheck' rows='1' cols='60' placeholder='puppetlabs/puppetlabs-inifile/151'></textarea>
+      <button id='submitBtn' type='submit' class='btn btn-primary'>Recheck!</button>
+    </form>
+
+{% endblock content %}
