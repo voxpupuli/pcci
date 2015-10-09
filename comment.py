@@ -6,6 +6,7 @@ import redis
 from github import Github
 import config
 import time
+import json
 
 # puppet-community-ci+test+3+1424905505+FAIL
 
