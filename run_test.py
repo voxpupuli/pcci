@@ -187,12 +187,15 @@ if __name__ == "__main__":
     test['pr'] = work_item['unique_name'].split('/')[2]
     test['github_url'] = "https://github.com/{0}/{1}/pull/{2}".format(*work_item['unique_name'].split("/"))
 
-    # record test results in github
-    r.rpush('completed', json.dumps(test))
-
     # record test results in redis
     r.rpush(module_name, json.dumps(test))
     r.rpush('results', json.dumps(test))
+
+    # record test results in github
+    # remove the giant text blobs before pushing on to the completed queue
+    test['response']['out'] = None
+    test['response']['err'] = None
+    r.rpush('completed', json.dumps(test))
 
     # Cleanup
     r.srem("in_progress", work_item['unique_name'] + '-' + work_item['nodeset'])
