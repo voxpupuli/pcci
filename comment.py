@@ -13,12 +13,12 @@ import json
 
 def main_loop():
     while True:
-        comment_to_make = json.loads(r.lpop('completed'))
+        comment_to_make = r.lpop('completed')
         if comment_to_make is None:
             print "looping"
             time.sleep(5)
         else:
-            comment(comment_to_make)
+            comment(json.loads(comment_to_make))
 
 
 def comment(comment_to_make):
