@@ -23,7 +23,6 @@ def main_loop():
 
 def comment(comment_to_make):
     org, project, pr = comment_to_make['unique_name'].split('/')
-    ts = comment_to_make['ts']
     nodeset = comment_to_make['nodeset']
     success = comment_to_make['success']
     print "Considering: {0}".format(comment_to_make)

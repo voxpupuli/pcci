@@ -9,9 +9,7 @@ import signal
 import subprocess
 import sys
 import tempfile
-import time
 import redis
-import yaml
 
 import config
 
@@ -40,7 +38,7 @@ def create_pr_env(work_item):
     print "working on {0}".format(work_item)
     org, project, pr = work_item.split('/')
     tempdir = tempfile.mkdtemp()
-    git_clone = subprocess.call(["git",
+    subprocess.call(["git",
                                  "clone",
                                  "https://github.com/{0}/{1}".format(org,
                                                                      project),

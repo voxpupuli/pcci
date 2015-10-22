@@ -5,7 +5,7 @@
 import redis
 import json
 from github import Github, UnknownObjectException
-from datetime import datetime, timedelta
+from datetime import datetime
 import config
 import yaml
 
