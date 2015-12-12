@@ -24,7 +24,7 @@ sudo ls
 disk-image-create vm centos7 local-config devuser rubygems -a amd64 -o testcentos7
 
 
-ddd-define-vm testcentos7 `pwd`/testcentos7.qcow2
+ddd-define-vm testcentos7 "$(pwd)/testcentos7.qcow2"
 virsh start testcentos7
 echo 'sleep 4'
 sleep 40
