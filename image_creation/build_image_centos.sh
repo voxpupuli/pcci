@@ -21,18 +21,18 @@ export DIB_DEBUG_TRACE=2
 sudo ls
 
 
-disk-image-create vm centos7 local-config devuser rubygems -a amd64 -o testcentos7 
+disk-image-create vm centos7 local-config devuser rubygems -a amd64 -o testcentos7
 
 
-ddd-define-vm testcentos7 `pwd`/testcentos7.qcow2 
+ddd-define-vm testcentos7 "$(pwd)/testcentos7.qcow2"
 virsh start testcentos7
 echo 'sleep 4'
 sleep 40
-mac=`virsh dumpxml testcentos7 | grep 'mac address' | cut -d "'" -f 2`
+mac=$(virsh domiflist testcentos7 | grep -oE "([0-9a-f]{2}:){5}[0-9a-f]{2}")
 
-ip=`arp -an | grep $mac | egrep -o '[0-9.]+{8,15}'`
+ip_addr=$(ip -4 n | awk -v mac="$mac" '$0 ~ mac {print $1}')
 
-ssh -i  vagrant_private.key -o StrictHostKeyChecking=no "vagrant@${ip}"
+ssh -i  vagrant_private.key -o StrictHostKeyChecking=no "vagrant@${ip_addr}"
 
 virsh destroy testcentos7
 virsh undefine testcentos7
