@@ -47,7 +47,7 @@ def comment(comment_to_make):
         status = 'failure'
     commit.create_status(status,
                          target_url="{0}{1}".format(config.rooturl,
-                                                    comment_to_make),
+                                                    comment_to_make['log_path']),
                          description="PCCI Voting System",
                          context="continuous-integration/pcci-{0}".format(nodeset))
 
