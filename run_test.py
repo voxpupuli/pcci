@@ -37,7 +37,7 @@ def signal_handler(signal, frame):
 def create_pr_env(work_item):
     print "working on {0}".format(work_item)
     org, project, pr = work_item.split('/')
-    tempdir = tempfile.mkdtemp()
+    tempdir = tempfile.mkdtemp(prefix = 'pcci')
     subprocess.call(["git",
                                  "clone",
                                  "https://github.com/{0}/{1}".format(org,
