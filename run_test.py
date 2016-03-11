@@ -156,8 +156,22 @@ if __name__ == "__main__":
         sys.exit()
     work_item = json.loads(json_work_item)
     print "starting work on {0}".format(work_item)
+    module_name = "/".join(work_item['unique_name'].split("/")[:-1])
+    print "module name is {0}".format(module_name)
     job = json.loads(r.get(work_item['unique_name']))
     now = str(datetime.datetime.now())
+    test = {}
+    test['unique_name'] = work_item['unique_name']
+    test['nodeset'] = work_item['nodeset']
+    test['module_name'] = module_name
+    test['pull'] = job
+    test['success'] = 'p'
+    test['log_path'] = ''
+    test['pr'] = work_item['unique_name'].split('/')[2]
+    test['github_url'] = "https://github.com/{0}/{1}/pull/{2}".format(*work_item['unique_name'].split("/"))
+    # record test results in redis
+    r.rpush(module_name, json.dumps(test))
+    r.rpush('results', json.dumps(test))
     job['begin_test'] = now
     r.set(work_item['unique_name'], json.dumps(job))
     r.sadd("in_progress", work_item['unique_name'] + '-' + work_item['nodeset'])
@@ -171,8 +185,6 @@ if __name__ == "__main__":
 
     # build test report object
 
-    module_name = "/".join(work_item['unique_name'].split("/")[:-1])
-    print "module name is {0}".format(module_name)
     test = {}
     test['unique_name'] = work_item['unique_name']
     test['nodeset'] = work_item['nodeset']
