@@ -5,13 +5,13 @@ pcci - puppet community continuous integration
 An experiment in public beaker testing
 
 
-requirements: 
+requirements:
 
 * github bot account
 * redis-server running
 * beefy machine to run tests
 
-A experimental instance is running at http://ci.puppet.community
+A experimental instance is running at https://ci.voxpupuli.org
 
 
 application deployment:

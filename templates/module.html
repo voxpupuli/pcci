@@ -34,7 +34,7 @@
   {% endif  %}
 
     <td><img src="{{ url_for('static', filename='img/' + logo_img)}}" height=20px; width=20px;>&nbsp;&nbsp;{{ item.nodeset }}</td>
-    <td><a href="http://ci.puppet.community/buildlogs/{{ item.log_path }}">View</a></td>
+    <td><a href="https://ci.voxpupuli.org/buildlogs/{{ item.log_path }}">View</a></td>
   </tr>
   {% endfor %}
 </table>
