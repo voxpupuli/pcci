@@ -5,7 +5,7 @@ pcci - puppet community continuous integration
 An experiment in public beaker testing
 
 
-requirements: 
+requirements:
 
 * github bot account
 * redis-server running
