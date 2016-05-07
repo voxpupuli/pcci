@@ -41,7 +41,9 @@ def comment(comment_to_make):
             commit = c
             break
 
-    if success == 0:
+    if success == 'p':
+        status = 'pending'
+    elif success == 0:
         status = 'success'
     else:
         status = 'failure'
