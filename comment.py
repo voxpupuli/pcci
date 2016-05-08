@@ -41,15 +41,17 @@ def comment(comment_to_make):
             commit = c
             break
 
-    if success == 'p':
+    if success == 'pending':
         status = 'pending'
-    elif success == 0:
-        status = 'success'
+        target_url = config.queueurl
     else:
-        status = 'failure'
-    commit.create_status(status,
-                         target_url="{0}{1}".format(config.rooturl,
-                                                    comment_to_make['log_path']),
+        if success == 0:
+            status = 'success'
+        else:
+            status = 'failure'
+        target_url = config.rooturl + comment_to_make['log_path']
+
+    commit.create_status(status, target_url=target_url,
                          description="PCCI Voting System",
                          context="continuous-integration/pcci-{0}".format(nodeset))
 
