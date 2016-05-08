@@ -65,5 +65,7 @@ for repo in repos:
             for os_set in os_sets:
                 job['nodeset'] = os_set
                 r.rpush('todo', json.dumps(job))
+                job['success'] = 'pending'
+                r.rpush('completed', json.dumps(job))
 
         r.set(unique_name, json.dumps(stored_pull))

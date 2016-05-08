@@ -7,6 +7,7 @@
 pccibottoken = 'CHANGEME'
 
 rooturl = 'http://localhost/'
+queueurl = 'http://localhost/queue'
 
 workers = 4
 
