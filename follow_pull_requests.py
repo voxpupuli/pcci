@@ -28,7 +28,12 @@ repos = config.repos
 for repo in repos:
     r.sadd('repos', str(repo))
     # from pdb import set_trace; set_trace()
-    pulls = g.get_repo(repo).get_pulls()
+    print "Analyzing PRs on repo {0}".format(repo)
+    try:
+        pulls = g.get_repo(repo).get_pulls()
+    except:
+        print "Failed to get pulls, did the repo rename?"
+        continue
 
     for pull in pulls:
         # from pdb import set_trace; set_trace()
