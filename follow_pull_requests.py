@@ -8,6 +8,7 @@ from github import Github, UnknownObjectException
 from datetime import datetime
 import config
 import yaml
+import base64
 
 # g = Github(config.username, config.password)
 g = Github(config.pccibottoken)
@@ -61,7 +62,8 @@ for repo in repos:
             job['unique_name'] = unique_name
 
             try:
-              pcci_file = yaml.load(g.get_repo(repo).get_contents('.pcci.yml'))
+              content = g.get_repo(repo).get_contents('.pcci.yml').content
+              pcci_file = yaml.load(base64.b64decode(content))
               os_sets = pcci_file['nodesets']
             except UnknownObjectException,e:
               os_sets = ['trusty','centos7']
