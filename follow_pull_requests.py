@@ -62,8 +62,7 @@ for repo in repos:
 
             try:
               pcci_file = yaml.load(g.get_repo(repo).get_contents('.pcci.yml'))
-              os_sets = []
-              os_sets.append(pcci_file['nodesets'])
+              os_sets = pcci_file['nodesets']
             except UnknownObjectException,e:
               os_sets = ['trusty','centos7']
 
