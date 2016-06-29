@@ -1,0 +1,12 @@
+HOSTS:
+  centos-6-1304-x86_64:
+    roles:
+      - master
+    platform: centos-6-1303-x86_64
+    user: 'vagrant'
+    password: 'vagrant'
+    hypervisor : libvirt
+    qcow2: '/home/pcci/srv/centos6vagrant.qcow2'
+    private_key_file: '/home/pcci/.vagrant_private.key'
+CONFIG:
+  type: foss
